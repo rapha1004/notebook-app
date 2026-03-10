@@ -1,0 +1,33 @@
+
+services:
+  app:
+    build: .
+    container_name: notebook
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mongo
+    volumes:
+      - .:/app
+      - /app/node_modules
+    develop:
+      watch:
+        - action: restart
+          path: .
+          target: /app
+          ignore:
+            - node_modules
+            - .next
+            - dist
+            - out
+
+  mongo:
+    image: mongo:7
+    container_name: db
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+volumes:
+  mongo_data:
