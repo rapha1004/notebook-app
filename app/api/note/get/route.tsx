@@ -4,7 +4,7 @@ import dbConnect from "@/lib/mongodb";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
-export const POST = async (req: NextRequest) => {
+export const GET = async (req: NextRequest) => {
 
   const session = await getServerSession(authOptions);
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -12,15 +12,11 @@ export const POST = async (req: NextRequest) => {
 
 
     await dbConnect();
-    const { title } = await req.json();
+    const notes = await Note.find({ userId: session.user.id }).select("_id title").lean();
 
-    const note = await Note.create({
-      title,
-      userId: session.user.id,
-    });
 
-    return NextResponse.json({ _id: note._id.toString() }, { status: 201 });
-  } catch (error: any) {
+        return NextResponse.json({ notes }, { status: 201 });
+    } catch (error: any) {
     console.error("Error creating note:", error);
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
