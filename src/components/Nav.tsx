@@ -3,6 +3,7 @@ import { useSession, signOut } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { useNote } from "@/context/NoteContext";
 import CreationForm from "@/components/CreationForm";
+import NavItem from "@/components/NavItem";
 
 export default function nav() {
   const { data: session } = useSession();
@@ -17,6 +18,7 @@ export default function nav() {
         setNoteList(data.notes || []);
       });
   }, [session]);
+
 
   if (!session) return null;
   return (
@@ -34,12 +36,7 @@ export default function nav() {
       <hr />
       <ul className="flex flex-col space-y-4 scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200 scrollbar-thumb-rounded-full scrollbar-track-rounded-full overflow-y-auto h-[calc(100vh-8rem)]">
         {NoteList?.map((note: any) => (
-          <li
-            key={note._id}
-            className="p-2 bg-gray-200 rounded hover:bg-gray-300 cursor-pointer"
-          >
-            {note.title}
-          </li>
+          <NavItem key={note._id} id={note._id} title={note.title} />
         ))}
       </ul>
     </nav>
