@@ -3,18 +3,20 @@
 import { useEffect, useState } from "react";
 import { useSession, signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { useNote } from "@/context/NoteContext";
 
 export default function Home() {
   const { data: session, status } = useSession();
   const [showCreationForm, setShowCreationForm] = useState(false);
   const [newNoteTitle, setNewNoteTitle] = useState("");
+  const { NoteList, setNoteList } = useNote();
 
-  const { push } = useRouter();
+  const router = useRouter();
 
   const handleCreationForm = (title: string) => {
     console.log(title);
 
-    fetch("/api/note/create", {
+    fetch("/api/note", {
       method: "POST",
       credentials: "include",
       headers: {
@@ -24,7 +26,8 @@ export default function Home() {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log("Note created, id:", data._id);
+        console.log("Note created, id:", data);
+        setNoteList(prev => [...prev, data]);
         setShowCreationForm(false);
       })
       .catch((error) => {
@@ -34,18 +37,18 @@ export default function Home() {
 
   useEffect(() => {
     if (status === "unauthenticated") {
-      push("/login");
+      router.push("/login");
     }
   }, [status]);
 
   if (!session) return null;
 
   return (
-    <>
+    <div className="ml-64 p-4">
       {session ? (
         <>
           <h1 className="text-2xl font-bold">
-            Bienvenue {session.user?.name} {session.user.id} 👋
+            Bienvenue {session.user?.name}👋
           </h1>
           <button
             className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 hover:cursor-pointer"
@@ -84,6 +87,6 @@ export default function Home() {
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 }
