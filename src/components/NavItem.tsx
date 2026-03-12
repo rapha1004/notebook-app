@@ -2,6 +2,7 @@
 
 import { useNote } from "@/context/NoteContext";
 import {useState} from "react";
+import Link from 'next/link'
 
 export default function NavItem({ id, title }: { id: string; title: string }) {
     const { NoteList, setNoteList }: any = useNote();
@@ -20,8 +21,10 @@ export default function NavItem({ id, title }: { id: string; title: string }) {
   return (
     <>
       <li className={`p-2 bg-gray-200 rounded hover:bg-gray-300 cursor-pointer flex items-center justify-between ${deleting ? 'animate-red-blink' : ''}`}>
+          <Link href={`/note/${id}`} className="flex-1">
         {title}
-        <button onClick={handleDelete}>
+          </Link>
+        <button onClick={handleDelete} className="cursor-pointer ml-2 p-1 rounded hover:bg-red-500 hover:text-white">
           <svg
             width="24px"
             height="24px"

@@ -1,10 +1,11 @@
 import { useNote } from "@/context/NoteContext";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function CreationForm({setShowCreationForm}: any) {
     const [newNoteTitle, setNewNoteTitle] = useState("");
     const { NoteList, setNoteList }: any = useNote();
-
+    const router = useRouter();
 
       const handleCreationForm = (title: string) => {
         console.log(title);
@@ -22,6 +23,7 @@ export default function CreationForm({setShowCreationForm}: any) {
             console.log("Note created, id:", data);
             setNoteList(prev => [...prev, data]);
             setShowCreationForm(false);
+            router.push(`/note/${data._id}`);
           })
           .catch((error) => {
             console.error("Error creating note:", error);
@@ -30,7 +32,7 @@ export default function CreationForm({setShowCreationForm}: any) {
 
     return (
         <>
-        <div className="fixed inset-0 bg-black/40 flex justify-center items-center">
+        <div className="fixed inset-0 bg-black/40 flex justify-center items-center z-50">
           <div className="bg-white p-6 rounded shadow w-80">
             <h2 className="text-lg font-bold mb-4">Créer une note</h2>
             <input
