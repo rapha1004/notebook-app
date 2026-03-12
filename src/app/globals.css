@@ -11,3 +11,14 @@
 .animate-red-blink {
   animation: redBlink 0.8s infinite;
 }
+
+/* textarea/editor headings styling when using prose class */
+.prose h1 {
+  @apply text-3xl font-bold;
+}
+.prose h2 {
+  @apply text-2xl font-bold;
+}
+.prose h3 {
+  @apply text-xl font-bold;
+}

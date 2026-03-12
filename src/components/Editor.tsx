@@ -3,9 +3,6 @@
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Underline from "@tiptap/extension-underline";
-import Heading from "@tiptap/extension-heading";
-import BulletList from "@tiptap/extension-bullet-list";
-import OrderedList from "@tiptap/extension-ordered-list";
 import { useEffect } from "react";
 import { useParams } from "next/navigation";
 
@@ -21,57 +18,9 @@ export default function Editor() {
   
   const editor = useEditor({
     extensions: [
-      // configure StarterKit to disable nodes we will customise manually
-      StarterKit.configure({
-        heading: false,
-        bulletList: false,
-        orderedList: false,
-      }),
-      Heading.extend({
-        addAttributes() {
-          return {
-            class: {
-              default: "",
-            },
-          };
-        },
-        renderHTML({ node, HTMLAttributes }) {
-          const level = node.attrs.level;
-          let sizeClass = "";
-          switch (level) {
-            case 1:
-              sizeClass = "text-3xl font-bold";
-              break;
-            case 2:
-              sizeClass = "text-2xl font-bold";
-              break;
-            case 3:
-              sizeClass = "text-xl font-bold";
-              break;
-            default:
-              sizeClass = "font-bold";
-          }
-          return [`h${level}`, { ...HTMLAttributes, class: sizeClass }, 0];
-        },
-      }).configure({ levels: [1, 2, 3] }),
-      BulletList.extend({
-        renderHTML({ HTMLAttributes }) {
-          return ["ul", { ...HTMLAttributes, class: "list-disc ml-6" }, 0];
-        },
-      }),
-      OrderedList.extend({
-        renderHTML({ HTMLAttributes }) {
-          return ["ol", { ...HTMLAttributes, class: "list-decimal ml-6" }, 0];
-        },
-      }),
+      StarterKit,
       Underline,
     ],
-    content: "<p>Hello world !</p>",
-    editorProps: {
-      attributes: {
-        class: "prose prose-lg min-h-[400px] focus:outline-none",
-      },
-    },
     autofocus: true,
     immediatelyRender: false,
   });
@@ -167,7 +116,7 @@ useEffect(() => {
       {/* Editor */}
       <EditorContent
         editor={editor}
-        className="flex-1 outline-none p-10 max-w-4xl mx-auto w-full"
+        className="prose prose-lg min-h-[400px] focus:outline-none flex-1 outline-none p-10 max-w-4xl mx-auto w-full"
       />
     </div>
   );
