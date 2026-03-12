@@ -2,9 +2,16 @@ import { useNote } from "@/context/NoteContext";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
+type Note = {
+  id: string;
+  title: string;
+  content: string;
+};
+
+
 export default function CreationForm({setShowCreationForm}: any) {
     const [newNoteTitle, setNewNoteTitle] = useState("");
-    const { NoteList, setNoteList }: any = useNote();
+    const [NoteList, setNoteList] = useState<Note[]>([]);
     const router = useRouter();
 
       const handleCreationForm = (title: string) => {
