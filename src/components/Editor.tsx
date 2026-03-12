@@ -3,24 +3,26 @@
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Underline from "@tiptap/extension-underline";
-import { useEffect } from "react";
 import { useParams } from "next/navigation";
+import { useEffect } from "react";
 
 type EditorProps = {
   pageId: string;
   className?: string;
 };
 
-export default function Editor({ }) {
+export default function Editor({ setTitle, isLoading, setIsLoading }: { setTitle: (title: string) => void; isLoading: boolean; setIsLoading: (isLoading: boolean) => void }) {
   const params = useParams();
   if (!params.id) return null;
   const pageId = Array.isArray(params.id) ? params.id[0] : params.id;
+
   
   const editor = useEditor({
     extensions: [
       StarterKit,
       Underline,
     ],
+    content: "Loading...",
     autofocus: true,
     immediatelyRender: false,
   });
@@ -45,6 +47,8 @@ useEffect(() => {
     .then((data) => {
       if (data.content) {
         editor.commands.setContent(data.content);
+        setTitle(data.title);
+        setIsLoading(false);
       } else {
         editor.commands.setContent("hello");
       }
@@ -65,7 +69,7 @@ useEffect(() => {
     clearTimeout(timeout);
     timeout = setTimeout(() => {
       sendUpdateToServer(editor.getJSON());
-    }, 4000);
+    }, 2000);
   };
 
   editor.on("update", handler);
@@ -95,6 +99,7 @@ useEffect(() => {
     editor.off("update", save);
   };
 }, [editor, pageId]);
+
 
   if (!editor) return null;
 
@@ -150,19 +155,16 @@ useEffect(() => {
         >
           Ordered List
         </button>
-        <button
-            onClick={() => sendUpdateToServer(editor.getJSON())}
-          className="px-2 py-1 border rounded"
-        >
-          save
-        </button>
+
       </div>
 
       {/* Editor */}
-      <EditorContent
-        editor={editor}
-        className="prose prose-lg min-h-[400px] focus:outline-none flex-1 outline-none p-10 max-w-4xl mx-auto w-full"
-      />
+<EditorContent
+  editor={editor}
+  className={`prose prose-lg min-h-100 focus:outline-none flex-1 outline-none p-10 max-w-4xl mx-auto w-full
+  [&_ul]:list-disc [&_ul]:ml-6
+  [&_ol]:list-decimal [&_ol]:ml-6 ${isLoading ? 'animate-loading' : ''}`}
+/>
     </div>
   );
 }

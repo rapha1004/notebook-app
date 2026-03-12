@@ -66,10 +66,6 @@ export const DELETE = async (req: NextRequest, { params }: { params: { id: strin
   const session = await getServerSession(authOptions);
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  setTimeout(() => {
-    console.log("Simulating delay for DELETE request...");
-  }, 2000);
-
   const { id } = await params;
 
   try {

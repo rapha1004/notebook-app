@@ -23,7 +23,7 @@ export default function login() {
     signIn("discord");
   };
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black/50">
+    <div className="fixed inset-0 flex items-center justify-center">
       <div className="bg-background p-6 rounded-lg shadow-lg max-w-md w-full">
         <div className="mt-4 flex justify-end space-x-2">
           <button onClick={handleSignIn}>Se connecter avec Discord</button>
