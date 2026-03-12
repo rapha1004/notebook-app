@@ -1,6 +1,2 @@
-TODO: get note list
-TODO: refacto page (interface/style)
-TODO: protect route
-
-
-remirror
+TODO: update page title
+TODO: change page when delete
