@@ -11,7 +11,7 @@ type EditorProps = {
   className?: string;
 };
 
-export default function Editor() {
+export default function Editor({ }) {
   const params = useParams();
   if (!params.id) return null;
   const pageId = Array.isArray(params.id) ? params.id[0] : params.id;
@@ -25,18 +25,57 @@ export default function Editor() {
     immediatelyRender: false,
   });
 
+  const sendUpdateToServer = (content: any) => {
+    if (!pageId) return;
+    fetch(`/api/note/${pageId}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ content }),
+    });
+  };
 
-  useEffect(() => {
-    if (!editor) return;
 
-    const savedAll = localStorage.getItem("notes");
-    if (!savedAll) return;
+useEffect(() => {
+  if (!editor) return;
 
-    const notes = JSON.parse(savedAll) as Record<string, any>;
-    if (notes[pageId]) {
-      editor.commands.setContent(notes[pageId]);
-    }
-  }, [editor, pageId]);
+  fetch(`/api/note/${pageId}`)
+    .then((res) => res.json())
+    .then((data) => {
+      if (data.content) {
+        editor.commands.setContent(data.content);
+      } else {
+        editor.commands.setContent("hello");
+      }
+    })
+    .catch((error) => {
+      console.error("Error fetching note content:", error);
+      editor.commands.setContent("hello");
+    });
+}, [editor, pageId]);
+
+
+useEffect(() => {
+  if (!editor) return;
+
+  let timeout: NodeJS.Timeout;
+
+  const handler = () => {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => {
+      sendUpdateToServer(editor.getJSON());
+    }, 4000);
+  };
+
+  editor.on("update", handler);
+
+  return () => {
+    editor.off("update", handler);
+    clearTimeout(timeout);
+  };
+}, [editor]);
+
 
   //auto save
 useEffect(() => {
@@ -110,6 +149,12 @@ useEffect(() => {
           className="px-2 py-1 border rounded"
         >
           Ordered List
+        </button>
+        <button
+            onClick={() => sendUpdateToServer(editor.getJSON())}
+          className="px-2 py-1 border rounded"
+        >
+          save
         </button>
       </div>
 

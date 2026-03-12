@@ -33,6 +33,34 @@ export const GET = async (req: NextRequest, { params }: { params: { id: string }
   }
 };
 
+export const POST = async (req: NextRequest, { params }: { params: { id: string } }) => {
+  const session = await getServerSession(authOptions);
+  if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+  const { id } = await params;
+
+  try {
+    await dbConnect();
+
+    const { content } = await req.json();
+
+    const note = await Note.findOneAndUpdate(
+      { _id: id, userId: session.user.id },
+      { content },
+      { new: true }
+    );
+
+    if (!note) {
+      return NextResponse.json({ error: "Note not found" }, { status: 404 });
+    }
+
+    return NextResponse.json({ _id: note._id.toString(), title: note.title, content: note.content }, { status: 200 });
+  } catch (error: any) {
+    console.error("Error updating note:", error);
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+
+};
 
 export const DELETE = async (req: NextRequest, { params }: { params: { id: string } }) => {
   const session = await getServerSession(authOptions);

@@ -18,7 +18,7 @@ const NoteSchema = new mongoose.Schema({
     default: {
       type: "doc",
       content: [
-        { type: "paragraph", content: [{ type: "text", text: "Hello world!" }] }
+        { type: "heading", content: [{ type: "text", text: "Hello world!" }] }
       ]
     }
   },
