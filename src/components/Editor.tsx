@@ -129,7 +129,7 @@ useEffect(() => {
         </button>
 
         <button
-          onClick={() => editor.chain().focus().toggleUnderline().run()}
+          onClick={() => (editor as any).chain().focus().toggleUnderline().run()}
           className="px-2 py-1 border rounded"
         >
           Underline
