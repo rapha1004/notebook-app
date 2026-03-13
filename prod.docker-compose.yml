@@ -3,25 +3,16 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-      target: dev
+      target: prod
     container_name: notebook
     ports:
       - "3000:3000"
     depends_on:
       - mongo
     environment:
-      NODE_ENV: development
+      NODE_ENV: production
     restart: unless-stopped
-    develop:
-      watch:
-        - action: restart
-          path: .
-          target: /app
-          ignore:
-            - node_modules
-            - .next
-            - dist
-            - out
+
   mongo:
     image: mongo:7
     container_name: db
@@ -29,6 +20,7 @@ services:
       - "27017:27017"
     volumes:
       - mongo_data:/data/db
+    restart: unless-stopped
 
 volumes:
   mongo_data:
