@@ -1,22 +1,20 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useSession, signOut } from "next-auth/react";
+import { useSession, signOut, signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useNote } from "@/context/NoteContext";
 import CreationForm from "@/components/CreationForm";
+import login from "./login/page";
 
 export default function Home() {
   const { data: session, status } = useSession();
-  const { NoteList, setNoteList } = useNote();
-
-  const router = useRouter();
 
 
 
   useEffect(() => {
     if (status === "unauthenticated") {
-      router.push("/login");
+     signIn("discord");
     }
   }, [status]);
 
