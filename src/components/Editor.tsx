@@ -50,9 +50,14 @@ export default function Editor({
 
   useEffect(() => {
     if (!editor || !content) return;
-    editor.commands.setContent(content);
-  }, [editor, content]);
 
+    const current = editor.getJSON();
+
+    if (JSON.stringify(current) !== JSON.stringify(content)) {
+      editor.commands.setContent(content);
+    }
+  }, [editor, content]);
+  
   if (!editor) return null;
 
   return (

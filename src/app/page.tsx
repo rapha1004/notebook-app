@@ -5,7 +5,6 @@ import { useSession, signOut, signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useNote } from "@/context/NoteContext";
 import CreationForm from "@/components/CreationForm";
-import login from "./login/page";
 
 export default function Home() {
   const { data: session, status } = useSession();
