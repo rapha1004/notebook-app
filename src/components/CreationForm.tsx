@@ -40,6 +40,7 @@ export default function CreationForm({ setShowCreationForm }: any) {
         console.error("Error creating note:", error);
       });
   };
+  
 
   return (
     <>

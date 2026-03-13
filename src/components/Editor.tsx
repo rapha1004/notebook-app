@@ -3,103 +3,55 @@
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Underline from "@tiptap/extension-underline";
-import { useParams } from "next/navigation";
 import { useEffect } from "react";
 
-type EditorProps = {
-  pageId: string;
-  className?: string;
+type Props = {
+  isLoading: boolean;
+  content: any;
+  setContent: (content: any) => void;
+  sendUpdateToServer: (content: any) => void;
 };
 
-export default function Editor({ setTitle, isLoading, setIsLoading }: { setTitle: (title: string) => void; isLoading: boolean; setIsLoading: (isLoading: boolean) => void }) {
-  const params = useParams();
-  if (!params.id) return null;
-  const pageId = Array.isArray(params.id) ? params.id[0] : params.id;
-
-  
+export default function Editor({
+  isLoading,
+  content,
+  setContent,
+  sendUpdateToServer,
+}: Props) {
   const editor = useEditor({
-    extensions: [
-      StarterKit,
-      Underline,
-    ],
-    content: "Loading...",
+    extensions: [StarterKit, Underline],
+    content: content,
     autofocus: true,
     immediatelyRender: false,
+    onUpdate: ({ editor }) => {
+      setContent(editor.getJSON());
+    },
   });
 
-  const sendUpdateToServer = (content: any) => {
-    if (!pageId) return;
-    fetch(`/api/note/${pageId}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ content }),
-    });
-  };
+  useEffect(() => {
+    if (!editor) return;
 
+    let timeout: NodeJS.Timeout;
 
-useEffect(() => {
-  if (!editor) return;
+    const handler = () => {
+      clearTimeout(timeout);
+      timeout = setTimeout(() => {
+        sendUpdateToServer(editor.getJSON());
+      }, 2000);
+    };
 
-  fetch(`/api/note/${pageId}`)
-    .then((res) => res.json())
-    .then((data) => {
-      if (data.content) {
-        editor.commands.setContent(data.content);
-        setTitle(data.title);
-        setIsLoading(false);
-      } else {
-        editor.commands.setContent("hello");
-      }
-    })
-    .catch((error) => {
-      console.error("Error fetching note content:", error);
-      editor.commands.setContent("hello");
-    });
-}, [editor, pageId]);
+    editor.on("update", handler);
 
+    return () => {
+      editor.off("update", handler);
+      clearTimeout(timeout);
+    };
+  }, [editor]);
 
-useEffect(() => {
-  if (!editor) return;
-
-  let timeout: NodeJS.Timeout;
-
-  const handler = () => {
-    clearTimeout(timeout);
-    timeout = setTimeout(() => {
-      sendUpdateToServer(editor.getJSON());
-    }, 2000);
-  };
-
-  editor.on("update", handler);
-
-  return () => {
-    editor.off("update", handler);
-    clearTimeout(timeout);
-  };
-}, [editor]);
-
-
-  //auto save
-useEffect(() => {
-  if (!editor) return;
-
-  const save = () => {
-    const savedAll = localStorage.getItem("notes");
-    const notes = savedAll ? JSON.parse(savedAll) : {};
-
-    notes[pageId] = editor.getJSON();
-    localStorage.setItem("notes", JSON.stringify(notes));
-  };
-
-  editor.on("update", save);
-
-  return () => {
-    editor.off("update", save);
-  };
-}, [editor, pageId]);
-
+  useEffect(() => {
+    if (!editor || !content) return;
+    editor.commands.setContent(content);
+  }, [editor, content]);
 
   if (!editor) return null;
 
@@ -129,7 +81,9 @@ useEffect(() => {
         </button>
 
         <button
-          onClick={() => (editor as any).chain().focus().toggleUnderline().run()}
+          onClick={() =>
+            (editor as any).chain().focus().toggleUnderline().run()
+          }
           className="px-2 py-1 border rounded"
         >
           Underline
@@ -155,16 +109,15 @@ useEffect(() => {
         >
           Ordered List
         </button>
-
       </div>
 
       {/* Editor */}
-<EditorContent
-  editor={editor}
-  className={`prose prose-lg min-h-100 focus:outline-none flex-1 outline-none p-10 max-w-4xl mx-auto w-full
+      <EditorContent
+        editor={editor}
+        className={`prose prose-lg min-h-100 focus:outline-none flex-1 outline-none p-10 max-w-4xl mx-auto w-full
   [&_ul]:list-disc [&_ul]:ml-6
-  [&_ol]:list-decimal [&_ol]:ml-6 ${isLoading ? 'animate-loading' : ''}`}
-/>
+  [&_ol]:list-decimal [&_ol]:ml-6 ${isLoading ? "animate-loading" : ""}`}
+      />
     </div>
   );
 }
