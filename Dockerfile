@@ -17,4 +17,4 @@ RUN npm run build
 RUN npm prune --production
 ENV NODE_ENV=production
 EXPOSE 3000
-CMD ["npm", "run", "start", "--", "-p", "3000", "-H", "0.0.0.0"]
+CMD ["npm", "run", "start"]
