@@ -8,6 +8,10 @@ export default function Home() {
   const { data: session, status } = useSession();
   const [showCreationForm, setShowCreationForm] = useState(false);
 
+    useEffect(() => {
+    document.title = "Notebook App";
+  }, []);
+
   useEffect(() => {
     if (status === "unauthenticated") {
       signIn("discord");

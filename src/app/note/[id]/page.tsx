@@ -14,6 +14,10 @@ export default function NotePage() {
   const pageId = Array.isArray(params.id) ? params.id[0] : params.id;
 
   useEffect(() => {
+    document.title = "Notebook App - " + title;
+  }, [title]);
+
+  useEffect(() => {
     fetch(`/api/note/${pageId}`)
       .then((res) => res.json())
       .then((data) => {
