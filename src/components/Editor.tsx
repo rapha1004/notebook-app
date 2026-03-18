@@ -130,13 +130,13 @@ export default function Editor({
     className="px-2 py-1 hover:bg-gray-100 rounded cursor-pointer"
   >
 <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
-  <text x="0" y="3.5" font-size="6" font-family="Arial" font-weight="bold" text-anchor="start" dominant-baseline="middle">1</text>
+  <text x="0" y="3.5" fontSize="6" fontFamily="Arial" fontWeight="bold" textAnchor="start" dominantBaseline="middle">1</text>
   <rect x="6" y="2" width="10" height="1.5" rx="0.25"/>
   
-  <text x="0" y="8" font-size="6" font-family="Arial" font-weight="bold" text-anchor="start" dominant-baseline="middle">2</text>
+  <text x="0" y="8" fontSize="6" fontFamily="Arial" fontWeight="bold" textAnchor="start" dominantBaseline="middle">2</text>
   <rect x="6" y="6.5" width="10" height="1.5" rx="0.25"/>
   
-  <text x="0" y="13.5" font-size="6" font-family="Arial" font-weight="bold" text-anchor="start" dominant-baseline="middle">3</text>
+  <text x="0" y="13.5" fontSize="6" fontFamily="Arial" fontWeight="bold" textAnchor="start" dominantBaseline="middle">3</text>
   <rect x="6" y="12" width="10" height="1.5" rx="0.25"/>
 </svg>
   </button>
