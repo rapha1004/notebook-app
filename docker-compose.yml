@@ -16,12 +16,15 @@ services:
       watch:
         - action: restart
           path: .
-          target: /app
+          #target: /app
           ignore:
             - node_modules
             - .next
             - dist
             - out
+    volumes:
+      - .:/app
+      - /app/node_modules
   mongo:
     image: mongo:7
     container_name: db

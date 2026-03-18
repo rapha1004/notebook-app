@@ -23,7 +23,7 @@ export default function Editor({
     content: content,
     autofocus: true,
     immediatelyRender: false,
-    onUpdate: ({ editor }) => {
+    onUpdate: ({ editor }: { editor: any }) => {
       setContent(editor.getJSON());
     },
   });
@@ -57,65 +57,91 @@ export default function Editor({
       editor.commands.setContent(content);
     }
   }, [editor, content]);
-  
+
   if (!editor) return null;
 
   return (
     <div className={`flex flex-col h-full w-full`}>
       {/* Toolbar */}
-      <div className="border-b p-2 flex flex-wrap gap-2">
-        <button
-          onClick={() => editor.chain().focus().toggleBold().run()}
-          className="px-2 py-1 border rounded"
-        >
-          Bold
-        </button>
+<ul className="border-b p-2 flex items-center gap-2 list-none m-0">
+  <li className="flex items-center">
+    <button
+      onClick={() => editor.chain().focus().toggleBold().run()}
+      className="px-2 py-1 hover:bg-gray-100 rounded cursor-pointer"
+    >
+      <strong>B</strong>
+    </button>
+  </li>
+  <li className="flex items-center">
+    <button
+      onClick={() => editor.chain().focus().toggleItalic().run()}
+      className="px-2 py-1 hover:bg-gray-100 rounded cursor-pointer"
+    >
+      <i>I</i>
+    </button>
+  </li>
+  <li className="flex items-center">
+    <button
+      onClick={() => editor.chain().focus().toggleStrike().run()}
+      className="px-2 py-1 hover:bg-gray-100 rounded cursor-pointer"
+    >
+      <s>S</s>
+    </button>
+  </li>
+  <li className="flex items-center">
+    <button
+      onClick={() => (editor as any).chain().focus().toggleUnderline().run()}
+      className="px-2 py-1 hover:bg-gray-100 rounded cursor-pointer"
+    >
+      <u>U</u>
+    </button>
+  </li>
+  <li className="flex items-center">
+    <button
+      onClick={() => editor.chain().focus().toggleCode().run()}
+      className="px-2 py-1 hover:bg-gray-100 rounded cursor-pointer"
+    >
+      {"</>"}
+    </button>
+  </li>
 
-        <button
-          onClick={() => editor.chain().focus().toggleItalic().run()}
-          className="px-2 py-1 border rounded"
-        >
-          Italic
-        </button>
+  <li className="flex items-center border-l border-gray-200 h-5 mx-2"></li>
+  <li className="flex items-center">
+  <button
+    onClick={() => editor.chain().focus().toggleBulletList().run()}
+    className="px-2 py-1 hover:bg-gray-100 rounded cursor-pointer"
+  >
+<svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
+  <circle cx="2" cy="3" r="1.5"/>
+  <rect x="5" y="2.25" width="9" height="1.5" rx="0.25"/>
+  
+  <circle cx="2" cy="8" r="1.5"/>
+  <rect x="5" y="7.25" width="9" height="1.5" rx="0.25"/>
+  
+  <circle cx="2" cy="13" r="1.5"/>
+  <rect x="5" y="12.25" width="9" height="1.5" rx="0.25"/>
+</svg>
+  </button>
+</li>
 
-        <button
-          onClick={() => editor.chain().focus().toggleStrike().run()}
-          className="px-2 py-1 border rounded"
-        >
-          Strike
-        </button>
-
-        <button
-          onClick={() =>
-            (editor as any).chain().focus().toggleUnderline().run()
-          }
-          className="px-2 py-1 border rounded"
-        >
-          Underline
-        </button>
-
-        <button
-          onClick={() => editor.chain().focus().toggleCode().run()}
-          className="px-2 py-1 border rounded"
-        >
-          Code
-        </button>
-
-        <button
-          onClick={() => editor.chain().focus().toggleBulletList().run()}
-          className="px-2 py-1 border rounded"
-        >
-          Bullet List
-        </button>
-
-        <button
-          onClick={() => editor.chain().focus().toggleOrderedList().run()}
-          className="px-2 py-1 border rounded"
-        >
-          Ordered List
-        </button>
-      </div>
-
+<li className="flex items-center">
+  <button
+    onClick={() => editor.chain().focus().toggleOrderedList().run()}
+    className="px-2 py-1 hover:bg-gray-100 rounded cursor-pointer"
+  >
+<svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
+  <text x="0" y="3.5" font-size="6" font-family="Arial" font-weight="bold" text-anchor="start" dominant-baseline="middle">1</text>
+  <rect x="6" y="2" width="10" height="1.5" rx="0.25"/>
+  
+  <text x="0" y="8" font-size="6" font-family="Arial" font-weight="bold" text-anchor="start" dominant-baseline="middle">2</text>
+  <rect x="6" y="6.5" width="10" height="1.5" rx="0.25"/>
+  
+  <text x="0" y="13.5" font-size="6" font-family="Arial" font-weight="bold" text-anchor="start" dominant-baseline="middle">3</text>
+  <rect x="6" y="12" width="10" height="1.5" rx="0.25"/>
+</svg>
+  </button>
+</li>
+</ul>
       {/* Editor */}
       <EditorContent
         editor={editor}
