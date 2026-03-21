@@ -118,8 +118,8 @@ export default function Editor({
           <input
             id="colorInput"
             type="color"
-            onClick={(e) => editor.commands.setColor(e.target.value)}
-            onChange={(e) => editor.commands.setColor(e.target.value)}
+            onClick={(e: React.MouseEvent<HTMLInputElement>) => editor.commands.setColor((e.target as HTMLInputElement).value)}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => editor.commands.setColor(e.target.value)}
             className="w-6 h-1 p-0 border-0"
           />
         </li>

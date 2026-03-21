@@ -2,12 +2,20 @@
 import Editor from "@/components/Editor";
 import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
+import { useSession, signIn } from "next-auth/react";
 
 export default function NotePage() {
+  const { data: session, status } = useSession();
   const [title, setTitle] = useState("Note Page");
   const [isLoading, setIsLoading] = useState(true);
   const [editorContent, setEditorContent] = useState("Loading...");
 
+  useEffect(() => {
+    if (status === "unauthenticated") {
+      signIn("discord");
+    }
+  }, [status]);
+  
   const params = useParams();
   if (!params.id) return null;
 
