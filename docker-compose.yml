@@ -9,8 +9,6 @@ services:
       - "3000:3000"
     depends_on:
       - mongo
-    environment:
-      NODE_ENV: development
     restart: unless-stopped
     develop:
       watch:
@@ -25,9 +23,14 @@ services:
     volumes:
       - .:/app
       - /app/node_modules
+
   mongo:
     image: mongo:7
     container_name: db
+    environment:
+      NODE_ENV: development
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
     ports:
       - "27018:27017"
     volumes:
