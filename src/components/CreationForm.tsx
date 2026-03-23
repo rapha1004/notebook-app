@@ -40,24 +40,29 @@ export default function CreationForm({ setShowCreationForm }: any) {
         console.error("Error creating note:", error);
       });
   };
-  
 
   return (
     <>
       <div className="fixed inset-0 bg-black/40 flex justify-center items-center z-50">
         <div className="bg-white p-6 rounded shadow w-80">
-          <h2 className="text-lg font-bold mb-4">Créer une note</h2>
+          <h2 className="text-lg font-bold mb-4">Create a note</h2>
           <input
             type="text"
             placeholder="New page"
             className="border p-2 w-full mb-4 rounded"
+            value={newNoteTitle}
             onChange={(e) => setNewNoteTitle(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                handleCreationForm(newNoteTitle || "New page")
+              }
+            }}
           />
           <button
-            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 cursor-pointer"
             onClick={() => handleCreationForm(newNoteTitle || "New page")}
           >
-            create doc
+            Create Note
           </button>
         </div>
       </div>

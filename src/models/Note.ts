@@ -9,7 +9,8 @@ const NoteSchema = new mongoose.Schema({
 
   title: {
     type: String,
-    default: "new page"
+    default: "New page",
+    set: (v: string) => (v && v.trim() !== "" ? v : "New page")
   },
 
   content: {
