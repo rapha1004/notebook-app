@@ -4,9 +4,13 @@ import dbConnect from "@/lib/mongodb";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
-export const GET = async (req: NextRequest, context: { params: Promise<{ id: string }> }) => {
+export const GET = async (
+  req: NextRequest,
+  context: { params: Promise<{ id: string }> },
+) => {
   const session = await getServerSession(authOptions);
-  if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!session)
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const { id } = await context.params;
 
@@ -14,49 +18,75 @@ export const GET = async (req: NextRequest, context: { params: Promise<{ id: str
     await dbConnect();
 
     const note = await Note.findOne({ _id: id, userId: session.user.id });
-    if (!note) return NextResponse.json({ error: "Note not found" }, { status: 404 });
+    if (!note)
+      return NextResponse.json({ error: "Note not found" }, { status: 404 });
 
-    return NextResponse.json({ _id: note._id.toString(), title: note.title, content: note.content });
+    return NextResponse.json({
+      _id: note._id.toString(),
+      title: note.title,
+      content: note.content,
+    });
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 };
 
-export const POST = async (req: NextRequest, context: { params: Promise<{ id: string }> }) => {
+export const POST = async (
+  req: NextRequest,
+  context: { params: Promise<{ id: string }> },
+) => {
   const session = await getServerSession(authOptions);
-  if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!session)
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const { id } = await context.params;
 
   try {
     await dbConnect();
-    const { content } = await req.json();
+    const { content, title } = await req.json();
+
+    const updateData: any = {};
+    if (content !== undefined) updateData.content = content;
+    if (title !== undefined) updateData.title = title;
 
     const note = await Note.findOneAndUpdate(
       { _id: id, userId: session.user.id },
-      { content },
-      { new: true }
+      updateData,
+      { new: true },
     );
 
-    if (!note) return NextResponse.json({ error: "Note not found" }, { status: 404 });
+    if (!note)
+      return NextResponse.json({ error: "Note not found" }, { status: 404 });
 
-    return NextResponse.json({ _id: note._id.toString(), title: note.title, content: note.content });
+    return NextResponse.json({
+      _id: note._id.toString(),
+      title: note.title,
+      content: note.content,
+    });
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 };
 
-export const DELETE = async (req: NextRequest, context: { params: Promise<{ id: string }> }) => {
+export const DELETE = async (
+  req: NextRequest,
+  context: { params: Promise<{ id: string }> },
+) => {
   const session = await getServerSession(authOptions);
-  if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!session)
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const { id } = await context.params;
 
   try {
     await dbConnect();
 
-    const note = await Note.findOneAndDelete({ _id: id, userId: session.user.id });
-    if (!note) return NextResponse.json({ error: "Note not found" }, { status: 404 });
+    const note = await Note.findOneAndDelete({
+      _id: id,
+      userId: session.user.id,
+    });
+    if (!note)
+      return NextResponse.json({ error: "Note not found" }, { status: 404 });
 
     return NextResponse.json({ _id: note._id.toString(), title: note.title });
   } catch (error: any) {

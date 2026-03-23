@@ -21,6 +21,10 @@ export default function NotePage() {
 
   const pageId = Array.isArray(params.id) ? params.id[0] : params.id;
 
+  const handleTitleUpdate = () => {
+
+  }
+
   useEffect(() => {
     document.title = "Notebook App - " + title;
   }, [title]);
@@ -43,6 +47,7 @@ export default function NotePage() {
       });
   }, [pageId]);
 
+  //TODO: send title to server
   const sendUpdateToServer = (content: any) => {
     if (!pageId) return;
     fetch(`/api/note/${pageId}`, {
