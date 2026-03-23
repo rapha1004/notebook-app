@@ -10,7 +10,7 @@ type Props = {
   isLoading: boolean;
   content: any;
   setContent: (content: any) => void;
-  sendUpdateToServer: (content: any) => void;
+  sendUpdateToServer: (data: any) => void;
 };
 
 export default function Editor({
@@ -41,7 +41,7 @@ export default function Editor({
     const handler = () => {
       clearTimeout(timeout);
       timeout = setTimeout(() => {
-        sendUpdateToServer(editor.getJSON());
+        sendUpdateToServer({content: editor.getJSON()});
       }, 2000);
     };
 

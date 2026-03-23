@@ -46,7 +46,7 @@ export default function Home() {
               className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 hover:cursor-pointer"
               onClick={() => setShowCreationForm(true)}
             >
-              create doc
+              Create Note
             </button>
           </div>
         </>
