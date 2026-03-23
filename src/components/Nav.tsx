@@ -24,7 +24,7 @@ export default function nav() {
   return (
     <>
         <nav className="fixed left-0 top-0 h-full w-64 bg-background p-4 shadow-md">
-      <h1 className="text-xl font-bold mb-8"><Link href="/">Notebook App</Link></h1>
+      <h1 className="text-xl font-bold mb-4"><Link href="/">Notebook App</Link></h1>
       <div className="flex justify-center mb-4">
         <button
           className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 hover:cursor-pointer"

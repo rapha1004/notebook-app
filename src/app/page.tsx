@@ -21,7 +21,8 @@ export default function Home() {
   if (!session) return null;
 
   return (
-    <div className="ml-64 p-4 min-h-screen flex flex-col items-center justify-center">
+    <>
+        <div className="ml-64 p-4 min-h-screen flex flex-col items-center justify-center">
       {session ? (
         <>
           <h1 className="text-2xl font-bold mb-6">
@@ -55,5 +56,6 @@ export default function Home() {
 
       {showCreationForm && <CreationForm setShowCreationForm={setShowCreationForm} />}
     </div>
+    </>
   );
 }

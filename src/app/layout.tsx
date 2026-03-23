@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 import Nav from "@/components/Nav";
 const figtree = Figtree({ subsets: ["latin"], variable: "--font-sans" });
 
+
 export default function RootLayout({
   children,
 }: Readonly<{
