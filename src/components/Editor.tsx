@@ -68,11 +68,12 @@ export default function Editor({
   return (
     <div className={`flex flex-col h-full w-full`}>
       {/* Toolbar */}
-      <ul className="border-b p-2 flex items-center gap-2 list-none m-0">
-        <li className="flex items-center" title="we">
+      <ul className="border-b p-2 flex items-center gap-1 list-none m-0 [&>*]:h-11 [&>*]:w-11 ">
+        {" "}
+        <li className="flex items-center">
           <button
             onClick={() => editor.chain().focus().toggleBold().run()}
-            className="px-2 py-1 hover:bg-gray-100 rounded cursor-pointer"
+            className="w-full h-full flex items-center justify-center hover:bg-gray-100 rounded cursor-pointer"
           >
             <strong>B</strong>
           </button>
@@ -80,7 +81,7 @@ export default function Editor({
         <li className="flex items-center">
           <button
             onClick={() => editor.chain().focus().toggleItalic().run()}
-            className="px-2 py-1 hover:bg-gray-100 rounded cursor-pointer"
+            className="w-full h-full flex items-center justify-center hover:bg-gray-100 rounded cursor-pointer"
           >
             <i>I</i>
           </button>
@@ -88,7 +89,7 @@ export default function Editor({
         <li className="flex items-center">
           <button
             onClick={() => editor.chain().focus().toggleStrike().run()}
-            className="px-2 py-1 hover:bg-gray-100 rounded cursor-pointer"
+            className="w-full h-full flex items-center justify-center hover:bg-gray-100 rounded cursor-pointer"
           >
             <s>S</s>
           </button>
@@ -98,7 +99,7 @@ export default function Editor({
             onClick={() =>
               (editor as any).chain().focus().toggleUnderline().run()
             }
-            className="px-2 py-1 hover:bg-gray-100 rounded cursor-pointer"
+            className="w-full h-full flex items-center justify-center hover:bg-gray-100 rounded cursor-pointer"
           >
             <u>U</u>
           </button>
@@ -106,30 +107,32 @@ export default function Editor({
         <li className="flex items-center">
           <button
             onClick={() => editor.chain().focus().toggleCode().run()}
-            className="px-2 py-1 hover:bg-gray-100 rounded cursor-pointer"
+            className="w-full h-full flex items-center justify-center hover:bg-gray-100 rounded cursor-pointer"
           >
             {"</>"}
           </button>
         </li>
-        <li className="flex flex-col items-center cursor-pointer px-2 py-1 hover:bg-gray-100 rounded">
+        <li className="flex flex-col items-center justify-center hover:bg-gray-100 rounded cursor-pointer">
           <label htmlFor="colorInput" className="cursor-pointer">
             A
           </label>
           <input
             id="colorInput"
             type="color"
-            onClick={(e: React.MouseEvent<HTMLInputElement>) => editor.commands.setColor((e.target as HTMLInputElement).value)}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => editor.commands.setColor(e.target.value)}
-            className="w-6 h-1 p-0 border-0"
+            onClick={(e: React.MouseEvent<HTMLInputElement>) =>
+              editor.commands.setColor((e.target as HTMLInputElement).value)
+            }
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              editor.commands.setColor(e.target.value)
+            }
+            className="w-6 h-2 mt-1"
           />
         </li>
-
-        <li className="flex items-center border-l border-gray-200 h-5 mx-2" />
-
+        <li className="flex items-center border-l border-gray-200 h-5 !w-px" />
         <li className="flex items-center">
           <button
             onClick={() => editor.chain().focus().toggleBulletList().run()}
-            className="px-2 py-1 hover:bg-gray-100 rounded cursor-pointer"
+            className="w-full h-full flex items-center justify-center hover:bg-gray-100 rounded cursor-pointer"
           >
             <svg
               width="16"
@@ -152,7 +155,7 @@ export default function Editor({
         <li className="flex items-center">
           <button
             onClick={() => editor.chain().focus().toggleOrderedList().run()}
-            className="px-2 py-1 hover:bg-gray-100 rounded cursor-pointer"
+            className="w-full h-full flex items-center justify-center hover:bg-gray-100 rounded cursor-pointer"
           >
             <svg
               width="16"
