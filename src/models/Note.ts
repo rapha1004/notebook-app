@@ -19,7 +19,7 @@ const NoteSchema = new mongoose.Schema({
     default: {
       type: "doc",
       content: [
-        { type: "heading", content: [{ type: "text", text: "Hello world!" }] }
+        { type: "heading", content: [{ type: "text", text: "👋 Hello world!" }] }
       ]
     }
   },

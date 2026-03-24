@@ -1,10 +1,13 @@
 "use client";
 
 import { useEditor, EditorContent } from "@tiptap/react";
+import Emoji, { gitHubEmojis } from "@tiptap/extension-emoji";
 import StarterKit from "@tiptap/starter-kit";
 import Underline from "@tiptap/extension-underline";
 import { TextStyle, Color } from "@tiptap/extension-text-style";
 import { useEffect } from "react";
+import suggestion from './suggestion';
+
 
 type Props = {
   isLoading: boolean;
@@ -20,7 +23,17 @@ export default function Editor({
   sendUpdateToServer,
 }: Props) {
   const editor = useEditor({
-    extensions: [StarterKit, Underline, TextStyle, Color],
+    extensions: [
+      StarterKit,
+      Underline,
+      TextStyle,
+      Color,
+      Emoji.configure({
+        emojis: gitHubEmojis,
+        enableEmoticons: true,
+        suggestion
+      }),
+    ],
     content: content,
     autofocus: true,
     immediatelyRender: false,
@@ -41,7 +54,7 @@ export default function Editor({
     const handler = () => {
       clearTimeout(timeout);
       timeout = setTimeout(() => {
-        sendUpdateToServer({content: editor.getJSON()});
+        sendUpdateToServer({ content: editor.getJSON() });
       }, 2000);
     };
 
