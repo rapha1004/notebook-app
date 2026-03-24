@@ -75,13 +75,14 @@ export default function Editor({
       editor.commands.setContent(content);
     }
   }, [editor, content]);
+  
 
   if (!editor) return null;
 
   return (
     <div className={`flex flex-col h-full w-full`}>
       {/* Toolbar */}
-      <ul className="border-b p-2 flex items-center gap-1 list-none m-0 [&>*]:h-11 [&>*]:w-11 ">
+      <ul className="sticky top-0 z-10 border-b p-2 flex items-center gap-1 list-none m-0 [&>*]:h-11 [&>*]:w-11 bg-white">
         {" "}
         <li className="flex items-center">
           <button
