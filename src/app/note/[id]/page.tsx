@@ -10,7 +10,7 @@ export default function NotePage() {
   const [isLoading, setIsLoading] = useState(true);
   const [editorContent, setEditorContent] = useState("Loading...");
   const [showTitleModal, setShowTitleModal] = useState(false);
-  const [newNoteTitle, setNewNoteTitle] = useState("");
+  const [newNoteTitle, setNewNoteTitle] = useState(title);
 
   useEffect(() => {
     if (status === "unauthenticated") {
@@ -44,6 +44,10 @@ export default function NotePage() {
         setIsLoading(false);
       });
   }, [pageId]);
+
+  useEffect(() => {
+    setNewNoteTitle(title);
+  }, [title]);
 
   const sendUpdateToServer = (data: { title?: string; content?: any }) => {
     if (!pageId) return;
@@ -112,7 +116,7 @@ export default function NotePage() {
               className="border p-2 w-full mb-4 rounded"
               onChange={(e) => setNewNoteTitle(e.target.value)}
               onKeyDown={(e) => {
-                if ((e.key === "Enter")) {
+                if (e.key === "Enter") {
                   sendUpdateToServer({ title: newNoteTitle });
                   setShowTitleModal(false);
                   setTitle(newNoteTitle || "New Page");
