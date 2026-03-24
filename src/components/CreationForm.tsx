@@ -48,6 +48,7 @@ export default function CreationForm({ setShowCreationForm }: any) {
           <h2 className="text-lg font-bold mb-4">Create a note</h2>
           <input
             type="text"
+            autoFocus
             placeholder="New page"
             className="border p-2 w-full mb-4 rounded"
             value={newNoteTitle}

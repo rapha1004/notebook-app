@@ -112,6 +112,7 @@ export default function NotePage() {
             <input
               type="text"
               placeholder="New page"
+              autoFocus
               value={newNoteTitle}
               className="border p-2 w-full mb-4 rounded"
               onChange={(e) => setNewNoteTitle(e.target.value)}
