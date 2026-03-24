@@ -44,7 +44,16 @@ export default function CreationForm({ setShowCreationForm }: any) {
   return (
     <>
       <div className="fixed inset-0 bg-black/40 flex justify-center items-center z-50">
-        <div className="bg-white p-6 rounded shadow w-80">
+        <div className="relative bg-white p-6 rounded shadow w-80">
+          <button
+            onClick={() => {
+              setShowCreationForm(false);
+              setNewNoteTitle("");
+            }}
+            className=" flex items-center justify-center absolute right-2 top-2 cursor-pointer w-6 h-6 border p-2 rounded-lg"
+          >
+            x
+          </button>
           <h2 className="text-lg font-bold mb-4">Create a note</h2>
           <input
             type="text"
@@ -55,7 +64,7 @@ export default function CreationForm({ setShowCreationForm }: any) {
             onChange={(e) => setNewNoteTitle(e.target.value)}
             onKeyDown={(e) => {
               if (e.key === "Enter") {
-                handleCreationForm(newNoteTitle || "New page")
+                handleCreationForm(newNoteTitle || "New page");
               }
             }}
           />
