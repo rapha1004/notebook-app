@@ -80,7 +80,7 @@ export default function Editor({
   return (
     <div className="flex flex-col h-full w-full">
       {/* Toolbar */}
-      <ul className="sticky top-0 z-10 bg-white border-b p-2 flex items-center gap-1 list-none m-0 [&>*]:h-11 [&>*]:w-11">
+      <ul className="flex flex-nowrap overflow-x-auto pb-2 gap-1 list-none m-0 [&>*]:h-11 [&>*]:w-11 [&>*]:shrink-0">
         {" "}
         <li className="flex items-center">
           <button
