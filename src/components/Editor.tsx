@@ -6,8 +6,7 @@ import StarterKit from "@tiptap/starter-kit";
 import Underline from "@tiptap/extension-underline";
 import { TextStyle, Color } from "@tiptap/extension-text-style";
 import { useEffect } from "react";
-import suggestion from './suggestion';
-
+import suggestion from "./suggestion";
 
 type Props = {
   isLoading: boolean;
@@ -31,7 +30,7 @@ export default function Editor({
       Emoji.configure({
         emojis: gitHubEmojis,
         enableEmoticons: true,
-        suggestion
+        suggestion,
       }),
     ],
     content: content,
@@ -75,14 +74,13 @@ export default function Editor({
       editor.commands.setContent(content);
     }
   }, [editor, content]);
-  
 
   if (!editor) return null;
 
   return (
-    <div className={`flex flex-col h-full w-full`}>
+    <div className="flex flex-col h-full w-full">
       {/* Toolbar */}
-      <ul className="sticky top-0 z-10 border-b p-2 flex items-center gap-1 list-none m-0 [&>*]:h-11 [&>*]:w-11 bg-white">
+      <ul className="sticky top-0 z-10 bg-white border-b p-2 flex items-center gap-1 list-none m-0 [&>*]:h-11 [&>*]:w-11">
         {" "}
         <li className="flex items-center">
           <button
@@ -221,12 +219,14 @@ export default function Editor({
         </li>
       </ul>
       {/* Editor */}
-      <EditorContent
-        editor={editor}
-        className={`prose prose-lg min-h-100 focus:outline-none flex-1 outline-none p-10 max-w-4xl mx-auto w-full
+      <div className="flex-1 overflow-auto">
+        <EditorContent
+          editor={editor}
+          className={`prose prose-lg min-h-100 focus:outline-none flex-1 outline-none p-10 max-w-4xl mx-auto w-full
   [&_ul]:list-disc [&_ul]:ml-6
   [&_ol]:list-decimal [&_ol]:ml-6 ${isLoading ? "animate-loading" : ""}`}
-      />
+        />
+      </div>
     </div>
   );
 }

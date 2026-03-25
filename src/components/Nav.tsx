@@ -76,7 +76,7 @@ export default function nav() {
         >
           <div className="flex justify-center mb-6">
             <button
-              className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+              className="bg-blue-500 text-white px-4 py-2 cursor-pointer rounded hover:bg-blue-600"
               onClick={() => setShowCreationForm(true)}
             >
               Create Note
@@ -90,6 +90,8 @@ export default function nav() {
           </ul>
         </div>
       </nav>
+        {showCreationForm && <CreationForm setShowCreationForm={setShowCreationForm} />}
+      
     </>
   );
 }
