@@ -17,7 +17,7 @@ export default function NavItem({ id, title }: { id: string; title: string }) {
             setNoteList(NoteList.filter((note: any) => note._id !== id));
           });
       };
-
+//TODO: mobile
   return (
     <>
       <li className={`p-2 bg-gray-200 rounded mb-0 hover:bg-gray-300 cursor-pointer flex items-center justify-between ${deleting ? 'animate-loading' : ''}`}>
