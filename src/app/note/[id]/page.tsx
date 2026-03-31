@@ -65,7 +65,7 @@ export default function NotePage() {
       <div className="p-4 flex flex-col h-screen overflow-hidden">
           {" "}
         <h1
-          className={`text-2xl flex gap-2 font-bold mb-4 ${isLoading ? "animate-loading" : ""}`}
+          className={`text-2xl flex gap-2 font-bold mb-4 max-sm:pl-8 ${isLoading ? "animate-loading" : ""}`}
         >
           {title}
           {!isLoading && (

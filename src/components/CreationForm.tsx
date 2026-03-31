@@ -50,7 +50,7 @@ export default function CreationForm({ setShowCreationForm }: any) {
               setShowCreationForm(false);
               setNewNoteTitle("");
             }}
-            className=" flex items-center justify-center absolute right-2 top-2 cursor-pointer w-6 h-6 border p-2 rounded-lg"
+            className=" flex items-center justify-center absolute right-2 top-2 cursor-pointer w-6 h-6"
           >
             x
           </button>
