@@ -8,3 +8,4 @@ jobs:
       - uses: actions/checkout@v4
       - run: docker compose -f prod.docker-compose.yml up --build
       - run: docker container logs notebook
+      
