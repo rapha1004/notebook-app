@@ -2,6 +2,7 @@
 
 A modern note-taking application built with Next.js, featuring real-time collaboration, rich text editing, and secure authentication.
 
+
 ## ✨ Features
 
 - **🔐 Secure Authentication** - Discord OAuth integration via NextAuth.js
