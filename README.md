@@ -117,14 +117,10 @@ Open [http://localhost:3000](http://localhost:3000)
 - **[React 19.2.3](https://react.dev/)** - UI library
 - **[TypeScript](https://www.typescriptlang.org/)** - Type-safe development
 - **[TipTap 3.20+](https://www.tiptap.dev/)** - Headless rich text editor
-  - Emoji support
-  - Text styling (bold, italic, underline)
-  - Starter kit with common extensions
 - **[shadcn/ui](https://ui.shadcn.com/)** - High-quality React components
 - **[Tailwind CSS 4](https://tailwindcss.com/)** - Utility-first CSS framework
 - **[NextAuth.js 4.24.13](https://next-auth.js.org/)** - Authentication
 - **[Mongoose 9.2.4](https://mongoosejs.com/)** - MongoDB ODM
-- **[HugeIcons](https://hugeicons.com/)** - Icon library
 
 ## 🏗️ Project Structure
 
