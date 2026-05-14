@@ -278,6 +278,6 @@ You can contribute by:
 
 ## 📞 Support
 
-Have questions or issues? Feel free to contact me on **Discord: rapha1004** 🎮
+Have questions or issues? Feel free to contact me on **Discord: rapha1004**
 
 I'm here to help!
