@@ -6,7 +6,7 @@ A modern note-taking application built with Next.js, featuring real-time collabo
 
 - **🔐 Secure Authentication** - Discord OAuth integration via NextAuth.js
 - **✏️ Rich Text Editor** - Powered by TipTap with full formatting capabilities
-- **🎨 Beautiful UI** - Built with shadcn/ui and Tailwind CSS
+- **🎨 Beautiful UI** - Built Tailwind CSS
 - **😊 Emoji Support** - Inline emoji picker and support
 - **🗂️ Note Management** - Create, read, update, and organize your notes
 - **💾 Data Persistence** - MongoDB integration for reliable data storage
