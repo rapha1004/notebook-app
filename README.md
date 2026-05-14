@@ -47,7 +47,7 @@ MONGO_PASSWORD=your_mongo_password
 MONGO_URI=mongodb://${MONGO_USER}:${MONGO_PASSWORD}@mongo:27017/notebook?authSource=admin
 ```
 
-See `example.env` for reference.
+See `.env.example` for reference.
 
 3. **Start the development environment**
 
