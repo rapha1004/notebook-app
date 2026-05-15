@@ -1,6 +1,6 @@
 # 📓 Notebook App
 
-A modern note-taking application built with Next.js, featuring real-time collaboration, rich text editing, and secure authentication.
+A modern note-taking application built with Next.js, featuring rich text editing, and secure authentication.
 
 ## ✨ Features
 
