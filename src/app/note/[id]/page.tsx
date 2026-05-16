@@ -1,5 +1,5 @@
 "use client";
-import Editor from "@/components/Editor";
+import Editor from "@/components/editor/Editor";
 import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import { useSession, signIn } from "next-auth/react";
