@@ -1,5 +1,5 @@
 # 📓 Notebook App
-
+![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
 A modern note-taking application built with Next.js, featuring rich text editing, and secure authentication.
 
 ## ✨ Features
