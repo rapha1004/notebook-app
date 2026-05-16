@@ -8,7 +8,7 @@ export default function NotePage() {
   const { data: session, status } = useSession();
   const [title, setTitle] = useState("Note Page");
   const [isLoading, setIsLoading] = useState(true);
-  const [editorContent, setEditorContent] = useState("Loading...");
+  const [editorContent, setEditorContent] = useState<any>("Loading...");
   const [showTitleModal, setShowTitleModal] = useState(false);
   const [newNoteTitle, setNewNoteTitle] = useState(title);
 
@@ -19,8 +19,6 @@ export default function NotePage() {
   }, [status]);
 
   const params = useParams();
-  if (!params.id) return null;
-
   const pageId = Array.isArray(params.id) ? params.id[0] : params.id;
 
   useEffect(() => {
