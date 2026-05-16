@@ -3,14 +3,16 @@ import Editor from "@/components/editor/Editor";
 import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import { useSession, signIn } from "next-auth/react";
+import NotFound from "@/components/NotFound";
 
 export default function NotePage() {
   const { data: session, status } = useSession();
   const [title, setTitle] = useState("Note Page");
   const [isLoading, setIsLoading] = useState(true);
-  const [editorContent, setEditorContent] = useState("Loading...");
+  const [editorContent, setEditorContent] = useState<object>({});
   const [showTitleModal, setShowTitleModal] = useState(false);
   const [newNoteTitle, setNewNoteTitle] = useState(title);
+  const [notFound, setNotFound] = useState(false);
 
   useEffect(() => {
     if (status === "unauthenticated") {
@@ -19,29 +21,33 @@ export default function NotePage() {
   }, [status]);
 
   const params = useParams();
-  if (!params.id) return null;
-
   const pageId = Array.isArray(params.id) ? params.id[0] : params.id;
-
+  
   useEffect(() => {
     document.title = "Notebook App - " + title;
   }, [title]);
 
   useEffect(() => {
     fetch(`/api/note/${pageId}`)
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.content) {
-          setEditorContent(data.content);
-          setTitle(data.title);
-          setIsLoading(false);
+      .then(async (res) => {
+        if (!res.ok) {
+          if (res.status === 404 || res.status === 400) {
+            setNotFound(true);
+            return;
+          }
+          throw new Error("Fetch error");
         }
+        return res.json();
       })
-      .catch((error) => {
-        console.log("Error fetching note content:", error);
-        setEditorContent("Error loading content");
-        setTitle("Error");
+      .then((data) => {
+        if (!data) return;
+
+        setEditorContent(data.content);
+        setTitle(data.title);
         setIsLoading(false);
+      })
+      .catch(() => {
+        setNotFound(true);
       });
   }, [pageId]);
 
@@ -49,7 +55,7 @@ export default function NotePage() {
     setNewNoteTitle(title);
   }, [title]);
 
-  const sendUpdateToServer = (data: { title?: string; content?: any }) => {
+  const sendUpdateToServer = (data: { title?: string; content?: object }) => {
     if (!pageId) return;
     fetch(`/api/note/${pageId}`, {
       method: "POST",
@@ -60,10 +66,11 @@ export default function NotePage() {
     });
   };
 
+  if (notFound) return <NotFound />;
   return (
     <>
       <div className="p-4 flex flex-col h-screen overflow-hidden">
-          {" "}
+        {" "}
         <h1
           className={`text-2xl flex gap-2 font-bold mb-4 max-sm:pl-8 ${isLoading ? "animate-loading" : ""}`}
         >
