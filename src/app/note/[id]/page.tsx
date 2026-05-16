@@ -8,7 +8,7 @@ export default function NotePage() {
   const { data: session, status } = useSession();
   const [title, setTitle] = useState("Note Page");
   const [isLoading, setIsLoading] = useState(true);
-  const [editorContent, setEditorContent] = useState<any>("Loading...");
+  const [editorContent, setEditorContent] = useState<object>({});
   const [showTitleModal, setShowTitleModal] = useState(false);
   const [newNoteTitle, setNewNoteTitle] = useState(title);
 
@@ -37,7 +37,7 @@ export default function NotePage() {
       })
       .catch((error) => {
         console.log("Error fetching note content:", error);
-        setEditorContent("Error loading content");
+        setEditorContent({ content: "Error loading content" });
         setTitle("Error");
         setIsLoading(false);
       });
@@ -47,7 +47,7 @@ export default function NotePage() {
     setNewNoteTitle(title);
   }, [title]);
 
-  const sendUpdateToServer = (data: { title?: string; content?: any }) => {
+  const sendUpdateToServer = (data: { title?: string; content?: object }) => {
     if (!pageId) return;
     fetch(`/api/note/${pageId}`, {
       method: "POST",

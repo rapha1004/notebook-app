@@ -26,8 +26,8 @@ export const GET = async (
       title: note.title,
       content: note.content,
     });
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  } catch (error: unknown) {
+    return NextResponse.json({ error: (error as Error).message }, { status: 500 });
   }
 };
 
@@ -45,7 +45,7 @@ export const POST = async (
     await dbConnect();
     const { content, title } = await req.json();
 
-    const updateData: any = {};
+    const updateData: { content?: string; title?: string } = {};
     if (content !== undefined) updateData.content = content;
     if (title !== undefined) updateData.title = title;
 
@@ -63,8 +63,8 @@ export const POST = async (
       title: note.title,
       content: note.content,
     });
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  } catch (error: unknown) {
+    return NextResponse.json({ error: (error as Error).message }, { status: 500 });
   }
 };
 
@@ -89,7 +89,7 @@ export const DELETE = async (
       return NextResponse.json({ error: "Note not found" }, { status: 404 });
 
     return NextResponse.json({ _id: note._id.toString(), title: note.title });
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  } catch (error: unknown) {
+    return NextResponse.json({ error: (error as Error).message }, { status: 500 });
   }
 };

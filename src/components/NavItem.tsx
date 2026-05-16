@@ -5,7 +5,7 @@ import {useState} from "react";
 import Link from 'next/link'
 
 export default function NavItem({ id, title }: { id: string; title: string }) {
-    const { NoteList, setNoteList }: any = useNote();
+    const { NoteList, setNoteList }: { NoteList: { _id: string; title: string }[]; setNoteList: React.Dispatch<React.SetStateAction<{ _id: string; title: string }[]>> } = useNote();
     const [deleting, setDeleting] = useState(false);
 
     const  handleDelete = () => {
@@ -14,7 +14,7 @@ export default function NavItem({ id, title }: { id: string; title: string }) {
           method: "DELETE",
         })
         .then(() => {
-            setNoteList(NoteList.filter((note: any) => note._id !== id));
+            setNoteList(NoteList.filter((note: { _id: string; title: string }) => note._id !== id));
           });
       };
 //TODO: mobile
