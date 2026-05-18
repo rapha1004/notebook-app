@@ -6,9 +6,9 @@ import Link from "next/link";
 import CreationForm from "@/components/CreationForm";
 import NavItem from "@/components/NavItem";
 
-export default function nav() {
+export default function Nav() {
   const { data: session } = useSession();
-  const { NoteList, setNoteList }: any = useNote();
+  const { NoteList, setNoteList } = useNote();
   const [showCreationForm, setShowCreationForm] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
 
@@ -118,7 +118,7 @@ export default function nav() {
           </div>
           <hr className="mb-4" />
           <ul className="flex flex-col space-y-4 scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200 gap-4 scrollbar-thumb-rounded-full scrollbar-track-rounded-full overflow-y-auto h-[calc(100vh-8rem)] p-2 pt-0">
-            {NoteList?.map((note: any) => (
+            {NoteList?.map((note: { _id: string; title: string }) => (
               <NavItem key={note._id} id={note._id} title={note.title} />
             ))}
           </ul>

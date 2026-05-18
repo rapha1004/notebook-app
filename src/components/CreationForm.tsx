@@ -10,7 +10,8 @@ interface Note {
   content?: string;
 }
 
-export default function CreationForm({ setShowCreationForm }: any) {
+
+export default function CreationForm({ setShowCreationForm }: { setShowCreationForm: React.Dispatch<React.SetStateAction<boolean>> }) {
   const [newNoteTitle, setNewNoteTitle] = useState("");
   const { NoteList, setNoteList } = useNote() as {
     NoteList: Note[];

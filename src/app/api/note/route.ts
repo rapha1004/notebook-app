@@ -11,9 +11,9 @@ export const GET = async (req: NextRequest) => {
     await dbConnect();
     const notes = await Note.find({ userId: session.user.id }).select("_id title").lean();
     return NextResponse.json({ notes }, { status: 200 });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error fetching notes:", error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ error: (error as Error).message }, { status: 500 });
   }
 };
 
@@ -30,8 +30,8 @@ export const POST = async (req: NextRequest) => {
     });
 
     return NextResponse.json({ _id: note._id.toString(), title: note.title }, { status: 201 });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error creating note:", error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ error: (error as Error).message }, { status: 500 });
   }
 };

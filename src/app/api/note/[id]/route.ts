@@ -3,6 +3,7 @@ import Note from "@/models/Note";
 import dbConnect from "@/lib/mongodb";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import mongoose from "mongoose";
 
 export const GET = async (
   req: NextRequest,
@@ -13,6 +14,9 @@ export const GET = async (
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const { id } = await context.params;
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return NextResponse.json({ error: "Invalid id" }, { status: 400 });
+  }
 
   try {
     await dbConnect();
@@ -26,8 +30,8 @@ export const GET = async (
       title: note.title,
       content: note.content,
     });
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  } catch (error: unknown) {
+    return NextResponse.json({ error: (error as Error).message }, { status: 500 });
   }
 };
 
@@ -40,12 +44,14 @@ export const POST = async (
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const { id } = await context.params;
-
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return NextResponse.json({ error: "Invalid id" }, { status: 400 });
+  }
   try {
     await dbConnect();
     const { content, title } = await req.json();
 
-    const updateData: any = {};
+    const updateData: { content?: string; title?: string } = {};
     if (content !== undefined) updateData.content = content;
     if (title !== undefined) updateData.title = title;
 
@@ -63,8 +69,8 @@ export const POST = async (
       title: note.title,
       content: note.content,
     });
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  } catch (error: unknown) {
+    return NextResponse.json({ error: (error as Error).message }, { status: 500 });
   }
 };
 
@@ -77,7 +83,9 @@ export const DELETE = async (
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const { id } = await context.params;
-
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return NextResponse.json({ error: "Invalid id" }, { status: 400 });
+  }
   try {
     await dbConnect();
 
@@ -89,7 +97,7 @@ export const DELETE = async (
       return NextResponse.json({ error: "Note not found" }, { status: 404 });
 
     return NextResponse.json({ _id: note._id.toString(), title: note.title });
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  } catch (error: unknown) {
+    return NextResponse.json({ error: (error as Error).message }, { status: 500 });
   }
 };
