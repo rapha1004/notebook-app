@@ -1,11 +1,14 @@
 "use client";
 
 import { useNote } from "@/context/NoteContext";
+import { useRouter, useParams } from "next/navigation";
 import {useState} from "react";
 import Link from 'next/link'
 
 export default function NavItem({ id, title }: { id: string; title: string }) {
     const { NoteList, setNoteList }: { NoteList: { _id: string; title: string }[]; setNoteList: React.Dispatch<React.SetStateAction<{ _id: string; title: string }[]>> } = useNote();
+    const router = useRouter(); 
+    const {id: currentId} = useParams();
     const [deleting, setDeleting] = useState(false);
 
     const  handleDelete = () => {
@@ -15,9 +18,11 @@ export default function NavItem({ id, title }: { id: string; title: string }) {
         })
         .then(() => {
             setNoteList(NoteList.filter((note: { _id: string; title: string }) => note._id !== id));
+            if (currentId === id) {
+                router.push("/");
+            }
           });
       };
-//TODO: mobile
   return (
     <>
       <li className={`p-2 bg-gray-200 rounded mb-0 hover:bg-gray-300 cursor-pointer flex items-center justify-between ${deleting ? 'animate-loading' : ''}`}>
