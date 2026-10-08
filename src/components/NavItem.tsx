@@ -26,7 +26,7 @@ export default function NavItem({ id, title }: { id: string; title: string }) {
   return (
     <>
       <li className={`bg-gray-200 rounded mb-0 hover:bg-gray-300 cursor-pointer flex items-center justify-between ${deleting ? 'animate-loading' : ''}`}>
-          <Link href={`/note/${id}`} className="flex-1">
+          <Link href={`/note/${id}`} className="flex-1 m-2">
         {title}
           </Link>
         <button onClick={handleDelete} className="cursor-pointer ml-2 p-1 rounded hover:bg-red-500 hover:text-white">
