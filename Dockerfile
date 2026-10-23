@@ -1,4 +1,4 @@
-FROM node:22 AS dev
+FROM node:24 AS dev
 
 WORKDIR /app
 COPY package*.json ./
@@ -6,7 +6,7 @@ RUN npm install
 COPY . .
 CMD ["npm", "run", "dev"]
 
-FROM node:22 AS prod
+FROM node:24 AS prod
 
 WORKDIR /app
 COPY package*.json ./
