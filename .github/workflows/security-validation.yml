@@ -5,13 +5,17 @@ on:
     branches:
       - chore/security-dependency-updates
 
+concurrency:
+  group: security-dependency-validation
+  cancel-in-progress: true
+
 permissions:
   contents: write
 
 jobs:
   validate:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -19,9 +23,7 @@ jobs:
           node-version: 24
           cache: npm
       - name: Refresh lockfile with compatible updates
-        run: |
-          npm update --package-lock-only --ignore-scripts
-          npm audit fix --package-lock-only --ignore-scripts || echo "Some advisories remain and need separate review."
+        run: npm update --package-lock-only --ignore-scripts --no-audit --no-fund
       - name: Commit refreshed lockfile
         run: |
           if git diff --quiet -- package-lock.json; then
@@ -34,11 +36,11 @@ jobs:
           git commit -m "chore(deps): refresh npm lockfile [skip ci]"
           git push
       - name: Install exact lockfile
-        run: npm ci
+        run: npm ci --no-audit --no-fund
       - name: Lint
         run: npm run lint
       - name: Production build
         run: npm run build
-      - name: Audit summary
+      - name: Security audit
         if: always()
-        run: npm audit --omit=dev || true
+        run: npm audit || true
