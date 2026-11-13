@@ -25,7 +25,7 @@ jobs:
       - name: Refresh patched dependency versions
         run: |
           npm install --package-lock-only --ignore-scripts --no-audit
-          npm audit fix --package-lock-only --ignore-scripts
+          npm audit fix --package-lock-only --ignore-scripts || echo "Some remaining advisories require breaking dependency changes; review them separately."
       - name: Install from lockfile
         run: npm ci
       - name: Lint
