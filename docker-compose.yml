@@ -26,6 +26,7 @@ services:
 
   mongo:
     image: mongo:7
+    pull_policy: always
     container_name: db
     environment:
       NODE_ENV: development

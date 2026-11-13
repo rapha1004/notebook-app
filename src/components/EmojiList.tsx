@@ -75,3 +75,5 @@ export const EmojiList = forwardRef<EmojiListRef, EmojiListProps>((props, ref) =
     </div>
   )
 })
+
+EmojiList.displayName = 'EmojiList'
