@@ -40,6 +40,8 @@ jobs:
       - name: Lint
         run: npm run lint
       - name: Production build
+        env:
+          MONGO_URI: mongodb://127.0.0.1:27017/notebook
         run: npm run build
       - name: Security audit
         if: always()
