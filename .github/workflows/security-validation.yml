@@ -23,7 +23,7 @@ jobs:
           node-version: 24
           cache: npm
       - name: Refresh lockfile with compatible updates
-        run: npm update --package-lock-only --ignore-scripts --no-audit --no-fund
+        run: npm install --package-lock-only --ignore-scripts --no-audit --no-fund
       - name: Commit refreshed lockfile
         run: |
           if git diff --quiet -- package-lock.json; then
