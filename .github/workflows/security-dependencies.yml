@@ -5,21 +5,26 @@ on:
     branches:
       - chore/security-dependency-updates
 
+concurrency:
+  group: security-dependency-refresh
+  cancel-in-progress: true
+
 permissions:
   contents: write
 
 jobs:
   update-and-verify:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 24
           cache: npm
-      - name: Refresh compatible dependency versions
+      - name: Refresh patched dependency versions
         run: |
-          npm update --package-lock-only --ignore-scripts
+          npm install --package-lock-only --ignore-scripts --no-audit
           npm audit fix --package-lock-only --ignore-scripts
       - name: Install from lockfile
         run: npm ci
