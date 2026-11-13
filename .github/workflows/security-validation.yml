@@ -43,6 +43,3 @@ jobs:
         env:
           MONGO_URI: mongodb://127.0.0.1:27017/notebook
         run: npm run build
-      - name: Security audit
-        if: always()
-        run: npm audit || true
