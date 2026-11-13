@@ -6,7 +6,7 @@ import { useSession, signIn } from "next-auth/react";
 import NotFound from "@/components/NotFound";
 
 export default function NotePage() {
-  const { data: session, status } = useSession();
+  const { status } = useSession();
   const [title, setTitle] = useState("Note Page");
   const [isLoading, setIsLoading] = useState(true);
   const [editorContent, setEditorContent] = useState<object>({});
@@ -51,10 +51,6 @@ export default function NotePage() {
       });
   }, [pageId]);
 
-  useEffect(() => {
-    setNewNoteTitle(title);
-  }, [title]);
-
   const sendUpdateToServer = (data: { title?: string; content?: object }) => {
     if (!pageId) return;
     fetch(`/api/note/${pageId}`, {
@@ -78,7 +74,10 @@ export default function NotePage() {
           {!isLoading && (
             <button
               className="cursor-pointer"
-              onClick={() => setShowTitleModal(true)}
+              onClick={() => {
+                setNewNoteTitle(title);
+                setShowTitleModal(true);
+              }}
             >
               <svg
                 width="24px"
