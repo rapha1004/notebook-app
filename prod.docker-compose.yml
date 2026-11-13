@@ -15,6 +15,7 @@ services:
 
   mongo:
     image: mongo:7
+    pull_policy: always
     command: ["mongod", "--auth"]
     container_name: db
     volumes:
