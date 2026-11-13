@@ -1,0 +1,44 @@
+name: Validate security dependency updates
+
+on:
+  push:
+    branches:
+      - chore/security-dependency-updates
+
+permissions:
+  contents: write
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Refresh lockfile with compatible updates
+        run: |
+          npm update --package-lock-only --ignore-scripts
+          npm audit fix --package-lock-only --ignore-scripts || echo "Some advisories remain and need separate review."
+      - name: Commit refreshed lockfile
+        run: |
+          if git diff --quiet -- package-lock.json; then
+            echo "Lockfile unchanged."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add package-lock.json
+          git commit -m "chore(deps): refresh npm lockfile [skip ci]"
+          git push
+      - name: Install exact lockfile
+        run: npm ci
+      - name: Lint
+        run: npm run lint
+      - name: Production build
+        run: npm run build
+      - name: Audit summary
+        if: always()
+        run: npm audit --omit=dev || true
