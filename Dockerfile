@@ -1,6 +1,6 @@
 FROM node:24-trixie-slim AS dev
 
-RUN apt-get update && apt-get upgrade -y && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get upgrade -y && npm install --global npm@11.21.2 && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 COPY package*.json ./
@@ -10,7 +10,7 @@ CMD ["npm", "run", "dev"]
 
 FROM node:24-trixie-slim AS prod
 
-RUN apt-get update && apt-get upgrade -y && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get upgrade -y && npm install --global npm@11.21.2 && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 COPY package*.json ./
