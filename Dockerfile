@@ -1,22 +1,41 @@
-FROM node:24-trixie-slim AS dev
+FROM node:24-trixie-slim AS base
 
-RUN apt-get update && apt-get upgrade -y && npm install --global npm@11.21.2 && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get upgrade -y && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
+
+FROM base AS deps
+
+COPY package*.json ./
+RUN npm ci
+
+FROM base AS dev
+
 COPY package*.json ./
 RUN npm ci
 COPY . .
 CMD ["npm", "run", "dev"]
 
-FROM node:24-trixie-slim AS prod
+FROM base AS builder
 
-RUN apt-get update && apt-get upgrade -y && npm install --global npm@11.21.2 && rm -rf /var/lib/apt/lists/*
-
-WORKDIR /app
 COPY package*.json ./
-RUN npm ci
+COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 RUN npm run build
-RUN npm prune --production
+
+FROM base AS prod
+
 ENV NODE_ENV=production
-CMD ["npm", "run", "start"]
+ENV HOSTNAME=0.0.0.0
+ENV PORT=3000
+
+# npm is only needed during installation and build, never at runtime.
+RUN rm -rf /usr/local/lib/node_modules/npm /usr/local/bin/npm /usr/local/bin/npx
+
+COPY --from=builder --chown=node:node /app/.next/standalone ./
+COPY --from=builder --chown=node:node /app/.next/static ./.next/static
+
+USER node
+
+EXPOSE 3000
+CMD ["node", "server.js"]
