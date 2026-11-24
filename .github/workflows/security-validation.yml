@@ -31,3 +31,31 @@ jobs:
         run: npm run build
       - name: Audit production dependencies
         run: npm audit --omit=dev
+
+  mongo-image:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build hardened MongoDB image
+        run: docker build --pull -t notebook-mongo:ci docker/mongo
+      - name: Check image hardening
+        run: |
+          docker run --rm --entrypoint sh notebook-mongo:ci -c '
+            set -e
+            test "$(id -un)" = mongodb
+            ! command -v gosu
+            grep -q "js-yaml 3.15.2" /js-yaml.js
+          '
+      - name: Smoke test (init with root user, then auth)
+        run: |
+          docker run -d --name mongo-ci \
+            -e MONGO_INITDB_ROOT_USERNAME=ci -e MONGO_INITDB_ROOT_PASSWORD=ci \
+            notebook-mongo:ci mongod --auth
+          for i in $(seq 1 30); do
+            if docker exec mongo-ci mongosh -u ci -p ci --quiet --eval 'db.runCommand({ ping: 1 }).ok' 2>/dev/null | grep -q 1; then
+              echo "MongoDB is up"; docker rm -f mongo-ci; exit 0
+            fi
+            sleep 2
+          done
+          docker logs mongo-ci; exit 1
