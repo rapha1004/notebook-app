@@ -7,6 +7,7 @@
 #   - Ubuntu base packages (glibc, ...)        -> upgraded below
 #   - gosu (built with Go 1.24.6)              -> removed, we run as `mongodb`
 #   - /js-yaml.js 3.13.1 (used by entrypoint)  -> replaced with 3.15.2
+#   - MongoDB Database Tools (Go binaries)     -> removed, not used at runtime
 FROM mongo:7
 
 # Pull the latest Ubuntu security updates (fixes libc6 / libc-bin CVEs).
@@ -27,5 +28,13 @@ RUN rm -rf /opt/js-yaml /js-yaml.js \
 # container directly as the unprivileged `mongodb` user (uid 999, which already
 # owns /data/db) makes it unnecessary, so we drop the vulnerable binary.
 RUN rm -f /usr/local/bin/gosu
+
+# MongoDB Database Tools (mongodump, mongorestore, ...) are Go binaries that
+# lag behind Go security releases. mongod and the entrypoint never use them
+# (the entrypoint only needs mongosh), so we remove them from the runtime image.
+# For backups, run them from a separate, throwaway mongo container instead.
+RUN rm -f /usr/bin/bsondump /usr/bin/mongodump /usr/bin/mongorestore \
+          /usr/bin/mongoexport /usr/bin/mongoimport /usr/bin/mongofiles \
+          /usr/bin/mongostat /usr/bin/mongotop
 
 USER mongodb
