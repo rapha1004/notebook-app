@@ -46,6 +46,10 @@ jobs:
             test "$(id -un)" = mongodb
             ! command -v gosu
             grep -q "js-yaml 3.15.2" /js-yaml.js
+            for tool in bsondump mongodump mongorestore mongoexport mongoimport mongofiles mongostat mongotop; do
+              ! command -v "$tool"
+            done
+            command -v mongosh
           '
       - name: Smoke test (init with root user, then auth)
         run: |
