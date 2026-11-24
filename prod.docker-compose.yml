@@ -14,8 +14,11 @@ services:
     restart: unless-stopped
 
   mongo:
-    image: mongo:7
-    pull_policy: always
+    build:
+      context: ./docker/mongo
+      pull: true
+    image: notebook-mongo:7
+    pull_policy: build
     command: ["mongod", "--auth"]
     container_name: db
     volumes:

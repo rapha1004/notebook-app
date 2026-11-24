@@ -25,8 +25,11 @@ services:
       - /app/node_modules
 
   mongo:
-    image: mongo:7
-    pull_policy: always
+    build:
+      context: ./docker/mongo
+      pull: true
+    image: notebook-mongo:7
+    pull_policy: build
     container_name: db
     environment:
       NODE_ENV: development
