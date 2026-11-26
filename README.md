@@ -9,6 +9,7 @@ A modern note-taking application built with Next.js, featuring rich text editing
 - **📝 Markdown Paste** - Pasted Markdown (headings, bold, italic, lists, links, code blocks) is rendered as rich, editable content
 - **🎨 Beautiful UI** - Built with Tailwind CSS
 - **😊 Emoji Support** - Inline emoji picker and support
+- **📊 Tables** - Insert tables in notes and add/remove rows and columns from the toolbar
 - **🗂️ Note Management** - Create, read, update, and organize your notes
 - **💾 Data Persistence** - MongoDB integration for reliable data storage
 - **📱 Responsive Design** - Works seamlessly on desktop, tablet, and mobile

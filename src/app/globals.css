@@ -21,3 +21,23 @@
 .prose h3 {
   @apply text-xl font-bold;
 }
+
+/* Tables */
+.prose table {
+  @apply w-full my-4 border-collapse table-fixed overflow-hidden;
+}
+.prose th,
+.prose td {
+  @apply border border-gray-300 px-3 py-2 align-top text-left;
+  min-width: 1em;
+}
+.prose th {
+  @apply bg-gray-100 font-semibold;
+}
+.prose th > p,
+.prose td > p {
+  @apply m-0;
+}
+.prose .selectedCell {
+  @apply bg-blue-100;
+}

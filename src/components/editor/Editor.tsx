@@ -6,6 +6,7 @@ import StarterKit from "@tiptap/starter-kit";
 import Underline from "@tiptap/extension-underline";
 import { TextStyle, Color } from "@tiptap/extension-text-style";
 import { Markdown } from "@tiptap/markdown";
+import { Table, TableRow, TableHeader, TableCell } from "@tiptap/extension-table";
 import { useEffect, useRef } from "react";
 import suggestion from "../suggestion";
 import Tools from "./Tools";
@@ -38,6 +39,10 @@ export default function Editor({
         suggestion,
       }),
       Markdown,
+      Table.configure({ resizable: false }),
+      TableRow,
+      TableHeader,
+      TableCell,
     ],
     editorProps: {
       // Render pasted Markdown (plain-text clipboard only) as rich content.

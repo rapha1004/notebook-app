@@ -1,6 +1,54 @@
-import type { Editor as TiptapEditor } from "@tiptap/react";
+import { useEditorState, type Editor as TiptapEditor } from "@tiptap/react";
+import { HugeiconsIcon, type IconSvgElement } from "@hugeicons/react";
+import {
+  TableIcon,
+  InsertRowDownIcon,
+  InsertColumnRightIcon,
+  DeleteRowIcon,
+  DeleteColumnIcon,
+  Delete02Icon,
+} from "@hugeicons/core-free-icons";
+
+type TableAction = {
+  label: string;
+  icon: IconSvgElement;
+  run: (editor: TiptapEditor) => boolean;
+};
+
+const tableActions: TableAction[] = [
+  {
+    label: "Add row",
+    icon: InsertRowDownIcon,
+    run: (editor) => editor.chain().focus().addRowAfter().run(),
+  },
+  {
+    label: "Delete row",
+    icon: DeleteRowIcon,
+    run: (editor) => editor.chain().focus().deleteRow().run(),
+  },
+  {
+    label: "Add column",
+    icon: InsertColumnRightIcon,
+    run: (editor) => editor.chain().focus().addColumnAfter().run(),
+  },
+  {
+    label: "Delete column",
+    icon: DeleteColumnIcon,
+    run: (editor) => editor.chain().focus().deleteColumn().run(),
+  },
+  {
+    label: "Delete table",
+    icon: Delete02Icon,
+    run: (editor) => editor.chain().focus().deleteTable().run(),
+  },
+];
 
 export default function Tools({ editor }: { editor: TiptapEditor }) {
+  const isInTable = useEditorState({
+    editor,
+    selector: ({ editor }) => editor.isActive("table"),
+  });
+
   return (
     <ul className="flex flex-nowrap overflow-x-auto pb-4 gap-1 list-none m-0 [&>*]:h-11 [&>*]:w-11 [&>*]:shrink-0">
       {" "}
@@ -139,6 +187,38 @@ export default function Tools({ editor }: { editor: TiptapEditor }) {
           </svg>
         </button>
       </li>
+      <li className="flex items-center border-l border-gray-200 h-5 !w-px" />
+      <li className="flex items-center">
+        <button
+          type="button"
+          title="Insert table"
+          aria-label="Insert table"
+          onClick={() =>
+            editor
+              .chain()
+              .focus()
+              .insertTable({ rows: 3, cols: 3, withHeaderRow: true })
+              .run()
+          }
+          className="w-full h-full flex items-center justify-center hover:bg-gray-100 rounded cursor-pointer"
+        >
+          <HugeiconsIcon icon={TableIcon} size={18} />
+        </button>
+      </li>
+      {tableActions.map(({ label, icon, run }) => (
+        <li key={label} className="flex items-center">
+          <button
+            type="button"
+            title={label}
+            aria-label={label}
+            disabled={!isInTable}
+            onClick={() => run(editor)}
+            className="w-full h-full flex items-center justify-center hover:bg-gray-100 rounded cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-transparent"
+          >
+            <HugeiconsIcon icon={icon} size={18} />
+          </button>
+        </li>
+      ))}
     </ul>
   );
 }
