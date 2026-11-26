@@ -1,10 +1,25 @@
 "use client";
 import { useSession, signOut } from "next-auth/react";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useNote } from "@/context/NoteContext";
 import Link from "next/link";
 import CreationForm from "@/components/CreationForm";
 import NavItem from "@/components/NavItem";
+import {
+  DndContext,
+  KeyboardSensor,
+  PointerSensor,
+  closestCenter,
+  useSensor,
+  useSensors,
+  type DragEndEvent,
+} from "@dnd-kit/core";
+import {
+  SortableContext,
+  arrayMove,
+  sortableKeyboardCoordinates,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
 
 export default function Nav() {
   const { data: session } = useSession();
@@ -12,14 +27,48 @@ export default function Nav() {
   const [showCreationForm, setShowCreationForm] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
 
-  useEffect(() => {
-    if (!session) return;
-    fetch("/api/note")
+  const loadNotes = useCallback(() => {
+    return fetch("/api/note")
       .then((res) => res.json())
       .then((data) => {
         setNoteList(data.notes || []);
       });
-  }, [session]);
+  }, [setNoteList]);
+
+  useEffect(() => {
+    if (!session) return;
+    loadNotes();
+  }, [session, loadNotes]);
+
+  const sensors = useSensors(
+    // A small distance keeps plain clicks on the handle from starting a drag.
+    useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
+    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates }),
+  );
+
+  const handleDragEnd = ({ active, over }: DragEndEvent) => {
+    if (!over || active.id === over.id) return;
+    const from = NoteList.findIndex((n: { _id: string }) => n._id === active.id);
+    const to = NoteList.findIndex((n: { _id: string }) => n._id === over.id);
+    if (from === -1 || to === -1) return;
+
+    // Optimistic update, then persist; on failure reload the server order.
+    const next = arrayMove(NoteList, from, to);
+    setNoteList(next);
+    fetch("/api/note/reorder", {
+      method: "PUT",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ids: next.map((n: { _id: string }) => n._id) }),
+    })
+      .then((res) => {
+        if (!res.ok) throw new Error(`Reorder failed (${res.status})`);
+      })
+      .catch((error) => {
+        console.error("Error reordering notes:", error);
+        loadNotes();
+      });
+  };
 
   return (
     <>
@@ -118,9 +167,21 @@ export default function Nav() {
           </div>
           <hr className="mb-4" />
           <ul className="flex flex-col space-y-4 scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200 gap-4 scrollbar-thumb-rounded-full scrollbar-track-rounded-full overflow-y-auto h-[calc(100vh-8rem)] p-2 pt-0">
-            {NoteList?.map((note: { _id: string; title: string }) => (
-              <NavItem key={note._id} id={note._id} title={note.title} />
-            ))}
+            <DndContext
+              id="sidebar-notes"
+              sensors={sensors}
+              collisionDetection={closestCenter}
+              onDragEnd={handleDragEnd}
+            >
+              <SortableContext
+                items={NoteList?.map((note: { _id: string }) => note._id) ?? []}
+                strategy={verticalListSortingStrategy}
+              >
+                {NoteList?.map((note: { _id: string; title: string }) => (
+                  <NavItem key={note._id} id={note._id} title={note.title} />
+                ))}
+              </SortableContext>
+            </DndContext>
           </ul>
         </div>
       </nav>

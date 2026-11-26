@@ -4,12 +4,21 @@ import { useNote } from "@/context/NoteContext";
 import { useRouter, useParams } from "next/navigation";
 import {useState} from "react";
 import Link from 'next/link'
+import { useSortable } from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 
 export default function NavItem({ id, title }: { id: string; title: string }) {
     const { NoteList, setNoteList }: { NoteList: { _id: string; title: string }[]; setNoteList: React.Dispatch<React.SetStateAction<{ _id: string; title: string }[]>> } = useNote();
     const router = useRouter(); 
     const {id: currentId} = useParams();
     const [deleting, setDeleting] = useState(false);
+    // Only the grip handle starts a drag, so the link and delete button
+    // behave exactly as before.
+    const { attributes, listeners, setNodeRef, setActivatorNodeRef, transform, transition, isDragging } = useSortable({ id });
+    const style = {
+      transform: CSS.Transform.toString(transform),
+      transition,
+    };
 
     const  handleDelete = () => {
         setDeleting(true);
@@ -25,7 +34,28 @@ export default function NavItem({ id, title }: { id: string; title: string }) {
       };
   return (
     <>
-      <li className={`p-2 bg-gray-200 rounded mb-0 hover:bg-gray-300 cursor-pointer flex items-center justify-between ${deleting ? 'animate-loading' : ''}`}>
+      <li
+        ref={setNodeRef}
+        style={style}
+        className={`p-2 bg-gray-200 rounded mb-0 hover:bg-gray-300 cursor-pointer flex items-center justify-between ${deleting ? 'animate-loading' : ''} ${isDragging ? 'relative z-10 shadow-md opacity-80' : ''}`}
+      >
+        <button
+          type="button"
+          ref={setActivatorNodeRef}
+          {...attributes}
+          {...listeners}
+          aria-label={`Reorder ${title}`}
+          className="cursor-grab active:cursor-grabbing touch-none mr-2 p-1 rounded text-gray-500 hover:bg-gray-400/40"
+        >
+          <svg width="12px" height="20px" viewBox="0 0 12 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <circle cx="3" cy="4" r="1.5" />
+            <circle cx="9" cy="4" r="1.5" />
+            <circle cx="3" cy="10" r="1.5" />
+            <circle cx="9" cy="10" r="1.5" />
+            <circle cx="3" cy="16" r="1.5" />
+            <circle cx="9" cy="16" r="1.5" />
+          </svg>
+        </button>
           <Link href={`/note/${id}`} className="flex-1">
         {title}
           </Link>

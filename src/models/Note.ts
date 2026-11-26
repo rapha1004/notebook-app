@@ -24,12 +24,17 @@ const NoteSchema = new mongoose.Schema({
     }
   },
 
+  // Manual position among the note's siblings (same user; later same parent).
+  // Absent on notes created before manual ordering existed.
+  order: {
+    type: Number
+  },
 
 }, {
   timestamps: true
 });
 
-// Supports the sidebar query: a user's notes, newest first.
-NoteSchema.index({ userId: 1, createdAt: -1 });
+// Supports the sidebar query: a user's notes by manual order.
+NoteSchema.index({ userId: 1, order: 1 });
 
 export default mongoose.models.Note || mongoose.model("Note", NoteSchema, "Notes");
