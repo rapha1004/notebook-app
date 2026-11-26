@@ -5,6 +5,7 @@ import Emoji, { gitHubEmojis } from "@tiptap/extension-emoji";
 import StarterKit from "@tiptap/starter-kit";
 import Underline from "@tiptap/extension-underline";
 import { TextStyle, Color } from "@tiptap/extension-text-style";
+import { Table, TableRow, TableHeader, TableCell } from "@tiptap/extension-table";
 import { useEffect } from "react";
 import suggestion from "../suggestion";
 import Tools from "./Tools";
@@ -33,6 +34,10 @@ export default function Editor({
         enableEmoticons: true,
         suggestion,
       }),
+      Table.configure({ resizable: false }),
+      TableRow,
+      TableHeader,
+      TableCell,
     ],
     content: content,
     autofocus: true,

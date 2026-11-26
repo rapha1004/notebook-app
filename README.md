@@ -8,6 +8,7 @@ A modern note-taking application built with Next.js, featuring rich text editing
 - **✏️ Rich Text Editor** - Powered by TipTap with full formatting capabilities
 - **🎨 Beautiful UI** - Built with Tailwind CSS
 - **😊 Emoji Support** - Inline emoji picker and support
+- **📊 Tables** - Insert tables in notes and add/remove rows and columns from the toolbar
 - **🗂️ Note Management** - Create, read, update, and organize your notes
 - **💾 Data Persistence** - MongoDB integration for reliable data storage
 - **📱 Responsive Design** - Works seamlessly on desktop, tablet, and mobile
