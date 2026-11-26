@@ -6,6 +6,7 @@ A modern note-taking application built with Next.js, featuring rich text editing
 
 - **🔐 Secure Authentication** - Discord OAuth integration via NextAuth.js
 - **✏️ Rich Text Editor** - Powered by TipTap with full formatting capabilities
+- **📝 Markdown Paste** - Pasted Markdown (headings, bold, italic, lists, links, code blocks) is rendered as rich, editable content
 - **🎨 Beautiful UI** - Built with Tailwind CSS
 - **😊 Emoji Support** - Inline emoji picker and support
 - **📊 Tables** - Insert tables in notes and add/remove rows and columns from the toolbar
@@ -229,6 +230,7 @@ To set up Discord OAuth:
 
 ### Notes
 
+- `GET /api/note` - List the current user's notes (`_id`, `title`), most recently created first
 - `POST /api/note` - Create a new note
 - `GET /api/note/[id]` - Fetch a specific note
 - `PUT /api/note/[id]` - Update a note

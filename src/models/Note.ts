@@ -29,4 +29,7 @@ const NoteSchema = new mongoose.Schema({
   timestamps: true
 });
 
+// Supports the sidebar query: a user's notes, newest first.
+NoteSchema.index({ userId: 1, createdAt: -1 });
+
 export default mongoose.models.Note || mongoose.model("Note", NoteSchema, "Notes");
