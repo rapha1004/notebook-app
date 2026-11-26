@@ -229,6 +229,7 @@ To set up Discord OAuth:
 
 ### Notes
 
+- `GET /api/note` - List the current user's notes (`_id`, `title`), most recently created first
 - `POST /api/note` - Create a new note
 - `GET /api/note/[id]` - Fetch a specific note
 - `PUT /api/note/[id]` - Update a note
