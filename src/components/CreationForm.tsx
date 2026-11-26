@@ -33,7 +33,8 @@ export default function CreationForm({ setShowCreationForm }: { setShowCreationF
       .then((res) => res.json())
       .then((data) => {
         console.log("Note created, id:", data);
-        setNoteList((prev) => [...prev, data]);
+        // Newest page goes to the top, matching the GET /api/note order.
+        setNoteList((prev) => [data, ...prev]);
         setShowCreationForm(false);
         router.push(`/note/${data._id}`);
       })

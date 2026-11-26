@@ -4,12 +4,20 @@ import dbConnect from "@/lib/mongodb";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
+// Sidebar order: most recently created page first. Kept as an explicit,
+// standalone sort so a future filter (e.g. `parentId` for nested pages)
+// can be added to the query without changing the ordering.
+const NOTE_LIST_SORT = { createdAt: -1, _id: -1 } as const;
+
 export const GET = async (req: NextRequest) => {
   const session = await getServerSession(authOptions);
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   try {
     await dbConnect();
-    const notes = await Note.find({ userId: session.user.id }).select("_id title").lean();
+    const notes = await Note.find({ userId: session.user.id })
+      .select("_id title")
+      .sort(NOTE_LIST_SORT)
+      .lean();
     return NextResponse.json({ notes }, { status: 200 });
   } catch (error: unknown) {
     console.error("Error fetching notes:", error);
