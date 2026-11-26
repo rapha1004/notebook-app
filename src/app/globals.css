@@ -41,3 +41,10 @@
 .prose .selectedCell {
   @apply bg-blue-100;
 }
+
+.prose a {
+  @apply text-blue-600 underline underline-offset-2 cursor-pointer transition-colors;
+}
+.prose a:hover {
+  @apply text-blue-800;
+}
