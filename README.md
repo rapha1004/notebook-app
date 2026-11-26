@@ -230,8 +230,9 @@ To set up Discord OAuth:
 
 ### Notes
 
-- `GET /api/note` - List the current user's notes (`_id`, `title`), most recently created first
-- `POST /api/note` - Create a new note
+- `GET /api/note` - List the current user's notes (`_id`, `title`) in their manual order (drag and drop in the sidebar); notes without a saved position come last, oldest first
+- `POST /api/note` - Create a new note (added at the end of the list)
+- `PUT /api/note/reorder` - Save a new order: body `{ "ids": [...] }` with every note id of the user, in the desired order
 - `GET /api/note/[id]` - Fetch a specific note
 - `PUT /api/note/[id]` - Update a note
 - `DELETE /api/note/[id]` - Delete a note
