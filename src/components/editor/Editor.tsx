@@ -5,9 +5,11 @@ import Emoji, { gitHubEmojis } from "@tiptap/extension-emoji";
 import StarterKit from "@tiptap/starter-kit";
 import Underline from "@tiptap/extension-underline";
 import { TextStyle, Color } from "@tiptap/extension-text-style";
-import { useEffect } from "react";
+import { Markdown } from "@tiptap/markdown";
+import { useEffect, useRef } from "react";
 import suggestion from "../suggestion";
 import Tools from "./Tools";
+import { looksLikeMarkdown } from "./markdownPaste";
 
 type Props = {
   isLoading: boolean;
@@ -22,6 +24,8 @@ export default function Editor({
   setContent,
   sendUpdateToServer,
 }: Props) {
+  const editorRef = useRef<TiptapEditor | null>(null);
+
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -33,7 +37,28 @@ export default function Editor({
         enableEmoticons: true,
         suggestion,
       }),
+      Markdown,
     ],
+    editorProps: {
+      // Render pasted Markdown (plain-text clipboard only) as rich content.
+      // Returning false falls back to Tiptap's default paste handling.
+      handlePaste: (view, event) => {
+        const currentEditor = editorRef.current;
+        const clipboard = event.clipboardData;
+        if (!currentEditor || !clipboard) return false;
+        // Rich (HTML) pastes are already handled by the default behavior.
+        if (clipboard.types.includes("text/html")) return false;
+        // Inside a code block, keep the raw text.
+        if (view.state.selection.$from.parent.type.spec.code) return false;
+
+        const text = clipboard.getData("text/plain");
+        if (!text || !looksLikeMarkdown(text)) return false;
+
+        return currentEditor.commands.insertContent(text, {
+          contentType: "markdown",
+        });
+      },
+    },
     content: content,
     autofocus: true,
     immediatelyRender: false,
@@ -41,6 +66,10 @@ export default function Editor({
       setContent(editor.getJSON());
     },
   });
+
+  useEffect(() => {
+    editorRef.current = editor;
+  }, [editor]);
 
   Color.configure({
     types: ["textStyle"],
