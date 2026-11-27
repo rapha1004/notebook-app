@@ -42,6 +42,14 @@
   @apply bg-blue-100;
 }
 
+/* Images embedded in notes */
+.prose img {
+  @apply max-w-full h-auto rounded;
+}
+.prose img.ProseMirror-selectednode {
+  outline: 2px solid #60a5fa;
+}
+
 .prose a {
   @apply text-blue-600 underline underline-offset-2 cursor-pointer transition-colors;
 }
