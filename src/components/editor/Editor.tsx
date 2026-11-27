@@ -6,11 +6,13 @@ import StarterKit from "@tiptap/starter-kit";
 import Underline from "@tiptap/extension-underline";
 import { TextStyle, Color } from "@tiptap/extension-text-style";
 import { Markdown } from "@tiptap/markdown";
+import Image from "@tiptap/extension-image";
 import { Table, TableRow, TableHeader, TableCell } from "@tiptap/extension-table";
 import { useEffect, useRef } from "react";
 import suggestion from "../suggestion";
 import Tools from "./Tools";
 import { looksLikeMarkdown } from "./markdownPaste";
+import { insertImageFiles } from "@/lib/imageFile";
 
 type Props = {
   isLoading: boolean;
@@ -43,6 +45,7 @@ export default function Editor({
       TableRow,
       TableHeader,
       TableCell,
+      Image.configure({ allowBase64: true }),
     ],
     editorProps: {
       // Render pasted Markdown (plain-text clipboard only) as rich content.
@@ -51,6 +54,15 @@ export default function Editor({
         const currentEditor = editorRef.current;
         const clipboard = event.clipboardData;
         if (!currentEditor || !clipboard) return false;
+        // Pasted image files (screenshots, copied files) are embedded.
+        const imageFiles = Array.from(clipboard.files ?? []).filter((file) =>
+          file.type.startsWith("image/"),
+        );
+        if (imageFiles.length > 0) {
+          event.preventDefault();
+          void insertImageFiles(currentEditor, imageFiles);
+          return true;
+        }
         // Rich (HTML) pastes are already handled by the default behavior.
         if (clipboard.types.includes("text/html")) return false;
         // Inside a code block, keep the raw text.
@@ -62,6 +74,20 @@ export default function Editor({
         return currentEditor.commands.insertContent(text, {
           contentType: "markdown",
         });
+      },
+      handleDrop: (view, event) => {
+        const currentEditor = editorRef.current;
+        const imageFiles = Array.from(event.dataTransfer?.files ?? []).filter(
+          (file) => file.type.startsWith("image/"),
+        );
+        if (!currentEditor || imageFiles.length === 0) return false;
+        event.preventDefault();
+        const coords = view.posAtCoords({
+          left: event.clientX,
+          top: event.clientY,
+        });
+        void insertImageFiles(currentEditor, imageFiles, coords?.pos);
+        return true;
       },
     },
     content: content,

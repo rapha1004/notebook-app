@@ -1,6 +1,9 @@
+import { useRef } from "react";
 import { useEditorState, type Editor as TiptapEditor } from "@tiptap/react";
 import { HugeiconsIcon, type IconSvgElement } from "@hugeicons/react";
+import { insertImageFiles } from "@/lib/imageFile";
 import {
+  ImageAdd01Icon,
   TableIcon,
   InsertRowDownIcon,
   InsertColumnRightIcon,
@@ -44,6 +47,7 @@ const tableActions: TableAction[] = [
 ];
 
 export default function Tools({ editor }: { editor: TiptapEditor }) {
+  const imageInputRef = useRef<HTMLInputElement>(null);
   const isInTable = useEditorState({
     editor,
     selector: ({ editor }) => editor.isActive("table"),
@@ -188,6 +192,31 @@ export default function Tools({ editor }: { editor: TiptapEditor }) {
         </button>
       </li>
       <li className="flex items-center border-l border-gray-200 h-5 !w-px" />
+      <li className="flex items-center">
+        <button
+          type="button"
+          title="Add image"
+          aria-label="Add image"
+          onClick={() => imageInputRef.current?.click()}
+          className="w-full h-full flex items-center justify-center hover:bg-gray-100 rounded cursor-pointer"
+        >
+          <HugeiconsIcon icon={ImageAdd01Icon} size={18} />
+        </button>
+        <input
+          ref={imageInputRef}
+          type="file"
+          accept="image/*"
+          multiple
+          hidden
+          onChange={async (e) => {
+            const files = Array.from(e.target.files ?? []);
+            if (files.length > 0) {
+              await insertImageFiles(editor, files);
+            }
+            e.target.value = "";
+          }}
+        />
+      </li>
       <li className="flex items-center">
         <button
           type="button"
