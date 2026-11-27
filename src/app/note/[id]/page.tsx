@@ -4,9 +4,11 @@ import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import { useSession, signIn } from "next-auth/react";
 import NotFound from "@/components/NotFound";
+import { useNote } from "@/context/NoteContext";
 
 export default function NotePage() {
   const { status } = useSession();
+  const { NoteList, setNoteList } = useNote();
   const [title, setTitle] = useState("Note Page");
   const [isLoading, setIsLoading] = useState(true);
   const [editorContent, setEditorContent] = useState<object>({});
@@ -50,6 +52,22 @@ export default function NotePage() {
         setNotFound(true);
       });
   }, [pageId]);
+
+  const applyRename = (nextTitle: string) => {
+    const clean = nextTitle.trim();
+    if (!clean || clean === title) {
+      setShowTitleModal(false);
+      return;
+    }
+    sendUpdateToServer({ title: clean });
+    setShowTitleModal(false);
+    setTitle(clean);
+    setNoteList(
+      NoteList.map((note: { _id: string; title: string }) =>
+        note._id === pageId ? { ...note, title: clean } : note,
+      ),
+    );
+  };
 
   const sendUpdateToServer = (data: { title?: string; content?: object }) => {
     if (!pageId) return;
@@ -133,18 +151,12 @@ export default function NotePage() {
               onChange={(e) => setNewNoteTitle(e.target.value)}
               onKeyDown={(e) => {
                 if (e.key === "Enter") {
-                  sendUpdateToServer({ title: newNoteTitle });
-                  setShowTitleModal(false);
-                  setTitle(newNoteTitle || "New Page");
+                  applyRename(newNoteTitle);
                 }
               }}
             />
             <button
-              onClick={() => {
-                sendUpdateToServer({ title: newNoteTitle });
-                setShowTitleModal(false);
-                setTitle(newNoteTitle || "New Page");
-              }}
+              onClick={() => applyRename(newNoteTitle)}
               className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 cursor-pointer"
             >
               Change title
