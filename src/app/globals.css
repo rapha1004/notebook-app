@@ -48,3 +48,13 @@
 .prose a:hover {
   @apply text-blue-800;
 }
+
+/* Emoji nodes: when the OS can't render an emoji natively, Tiptap falls back
+   to a 64px CDN image. Keep it inline and text-sized. */
+.prose span[data-type="emoji"] img {
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.1em;
+  display: inline-block;
+  margin: 0;
+}

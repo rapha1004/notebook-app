@@ -49,7 +49,7 @@ export const EmojiList = forwardRef<EmojiListRef, EmojiListProps>((props, ref) =
         }
         if (event.key === 'Tab') {
           event.preventDefault()
-          if (props.items.length > 0) selectItem(0)
+          if (props.items.length > 0) selectItem(selectedIndex)
           return true
         }
         return false
@@ -65,7 +65,7 @@ export const EmojiList = forwardRef<EmojiListRef, EmojiListProps>((props, ref) =
           key={index}
           onClick={() => selectItem(index)}
           className={`flex items-center gap-1 w-full text-left p-1 rounded cursor-pointer
-            ${index === 0 ? 'bg-gray-300' : ''}
+            ${index === selectedIndex ? 'bg-gray-300' : ''}
             hover:bg-gray-300`}
         >
           {item.fallbackImage ? <img src={item.fallbackImage} className="w-4 h-4" alt="" /> : item.emoji}

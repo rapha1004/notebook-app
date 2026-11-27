@@ -3,7 +3,6 @@
 import {useEditor, EditorContent, type Editor as TiptapEditor, } from "@tiptap/react";
 import Emoji, { gitHubEmojis } from "@tiptap/extension-emoji";
 import StarterKit from "@tiptap/starter-kit";
-import Underline from "@tiptap/extension-underline";
 import { TextStyle, Color } from "@tiptap/extension-text-style";
 import { Markdown } from "@tiptap/markdown";
 import { Table, TableRow, TableHeader, TableCell } from "@tiptap/extension-table";
@@ -30,7 +29,6 @@ export default function Editor({
   const editor = useEditor({
     extensions: [
       StarterKit,
-      Underline,
       TextStyle,
       Color,
       Emoji.configure({
